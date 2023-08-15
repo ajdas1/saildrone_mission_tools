@@ -1,2 +1,7 @@
 # compiled function files
 **.pyc
+
+
+# data files
+**.dat
+**.dat.gz
