@@ -3,6 +3,7 @@ import urllib.request
 
 from conversions import coordinate_degrees_minutes_to_decimal
 from datetime import datetime, timedelta
+from paths import url_glider_franklin, url_glider_unit1091
 
 ### URLs for glider positions were provided by Catherine Edwards.
 
@@ -10,7 +11,7 @@ from datetime import datetime, timedelta
 print()
 log_start_time = datetime.strptime("1970-01-01", "%Y-%m-%d")
 # Franklin
-url_glider = "http://dockserver.skio.uga.edu/images/franklin/franklin_wptlatlonDate.txt"
+url_glider = url_glider_franklin
 page = str(urllib.request.urlopen(url_glider).read())
 tmp = page.split("\\n")
 category = [tm.split(" ")[0][:-1].split("'")[-1] for tm in tmp if len(tm) > 5]
@@ -43,8 +44,8 @@ print(
     + "\n"
 )
 
-# Franklin
-url_glider = "http://dockserver.skio.uga.edu/images/franklin/franklin_wptlatlonDate.txt"
+# Unit_1091
+url_glider = url_glider_unit1091
 page = str(urllib.request.urlopen(url_glider).read())
 tmp = page.split("\\n")
 category = [tm.split(" ")[0][:-1].split("'")[-1] for tm in tmp if len(tm) > 5]
