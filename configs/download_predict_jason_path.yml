@@ -1,0 +1,7 @@
+download_jason3_data: False
+download_jason3_data_path: "data/satellite/jason3"
+number_most_recent_cycles_to_download: 4
+predict_overpass_at_location: True
+predicted_point_lon: -65.55
+predicted_point_lat: 23
+number_of_future_overpasses: 5

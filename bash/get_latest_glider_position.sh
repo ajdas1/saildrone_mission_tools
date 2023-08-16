@@ -1,2 +1,2 @@
 
-python get_latest_glider_position.sh
+python ../scripts/get_latest_glider_position.py

@@ -192,4 +192,5 @@ dependencies:
     - traitlets==5.7.1
     - unicodedata2==15.0.0
     - wheel==0.38.4
+    - xarray==2023.6.0
 prefix: /Users/asavarin/anaconda3/envs/sd_mission_tools
