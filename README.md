@@ -21,8 +21,10 @@ To create an anaconda environment where the scripts should run smoothly:
 
 ## Predicting JASON ovelpass times
 **bash/download_predic_jason_path.sh**
+If downlad_jason3_data is True in the config file:
 - downloads the last (4) cycles of JASON-3 satellite data.
 - extracts latitude, longitude, and time data.
+If predict_overpass_at_location is True:
 - for a given point, find the next (5) return times of the satellite overpass based on previous data.
 
 ## Downloading atcf forecast and best track data

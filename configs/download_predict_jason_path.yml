@@ -1,4 +1,4 @@
-download_jason3_data: False
+download_jason3_data: True
 download_jason3_data_path: "data/satellite/jason3"
 number_most_recent_cycles_to_download: 4
 predict_overpass_at_location: True
