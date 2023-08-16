@@ -1,3 +1,5 @@
 download_nhc_atcf_data: True
 download_nhc_atcf_data_path: "data/hurricane_forecasts"
+start_year: 2001
+end_year: 2023
 preprocess_wind_radii: True
