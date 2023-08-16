@@ -5,7 +5,8 @@ from typing import Dict
 
 repo_name = "saildrone_mission_tools"
 atcf_archive = "https://ftp.nhc.noaa.gov/atcf/archive/"
-
+url_glider_franklin = "http://dockserver.skio.uga.edu/images/franklin/franklin_wptlatlonDate.txt"
+url_glider_unit1091 = "http://dockserver.skio.uga.edu/images/franklin/franklin_wptlatlonDate.txt"
 
 def repository_path() -> str:
     """
@@ -47,6 +48,5 @@ def check_for_dir_create(dirname: str):
         repo_idx = dirs.index(repo_name) + 1
         for dir in range(repo_idx, len(dirs)):
             dir_path = f"{os.sep}".join(dirs[: dir + 1])
-            print(dir_path)
             if not os.path.isdir(dir_path):
                 os.mkdir(dir_path)
