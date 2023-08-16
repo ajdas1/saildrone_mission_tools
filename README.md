@@ -5,9 +5,19 @@ To create an anaconda environment where the scripts should run smoothly:
 
 ```conda env create -f configs/environment.yml```
 
+## Basic directory structure
+- **bash**: contains shell scripts that describe the workflow. In a bash environment, you can run all the steps for a specific task in a row.
+- **configs**: contains configuration .yml files for different tasks. The config file matches the script name in bash for easier identification.
+- **data**: where data for processing will get stored. Might not be there at the beginning, but will get created the first time it is needed.
+- **figures**: where images get stored.
+- **scripts**: where working scripts are stored - gets called within bash scripts.
+- **util**: custom functions.
+
+
 ## Updating glider positions
 **bash/get_latest_glider_position.sh**
 - retrieves the latest positions for Franklin and Unit_1091 gliders (courtesy of Catherine Edwards).
+
 
 ## Downloading atcf forecast and best track data
 **bash/download_and_process_atcf_hurricane_data.sh**
