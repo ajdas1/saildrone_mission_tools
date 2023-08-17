@@ -1,8 +1,8 @@
 import os
 import requests
 import sys
-import urllib
-import xarray as xr
+import urllib.request
+import urllib.error
 
 from bs4 import BeautifulSoup
 from paths import check_for_dir_create, jason3_archive, read_yaml_config, repo_path
@@ -37,8 +37,5 @@ for record in range(config["number_most_recent_cycles_to_download"]):
         if not os.path.isfile(f"{jason_dir}{os.sep}{filename}"):
             try:
                 urllib.request.urlretrieve(file, f"{jason_dir}{os.sep}{filename}")
-                # data = xr.open_dataset(f"{jason_dir}{os.sep}{filename}", engine="netcdf4")
-                # if data.variables == {}:
-                #     os.remove(f"{jason_dir}{os.sep}{filename}")
             except urllib.error.HTTPError:
                 continue

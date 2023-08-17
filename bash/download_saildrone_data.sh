@@ -1,0 +1,1 @@
+python ../scripts/download_latest_saildrone_data.py

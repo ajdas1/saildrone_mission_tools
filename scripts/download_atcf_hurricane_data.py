@@ -2,7 +2,8 @@ import os
 import requests
 import subprocess
 import sys
-import urllib
+import urllib.request
+import urllib.error
 
 from bs4 import BeautifulSoup
 from paths import atcf_archive, check_for_dir_create, read_yaml_config, repo_path
