@@ -18,6 +18,11 @@ To create an anaconda environment where the scripts should run smoothly:
 **bash/get_latest_glider_position.sh**
 - retrieves the latest positions for Franklin and Unit_1091 gliders (courtesy of Catherine Edwards).
 
+## Downloading the latest saildrone data (low-res)
+**bash/download_saildrone_data.sh**
+If download_saildrone_data is True in the config file:
+- downloads the latest nc files for the saildrones specified in the config file.
+
 
 ## Predicting JASON ovelpass times
 **bash/download_predic_jason_path.sh**
