@@ -31,6 +31,7 @@ if not fl_saildrone in os.listdir(saildrone_dir):
     print(f"Data for saildrone {config['comparison_saildrone']} not found.")
     sys.exit()
 
+print(f"Comparing SD-{config['comparison_saildrone']} and buoy {config['comparison_buoy']} observations.")
 
 # read in and process data
 buoy_data = read_ndbc_buoy_format(filename=f"{buoy_dir}{os.sep}{fl_buoy}")
