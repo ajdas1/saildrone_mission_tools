@@ -7,9 +7,7 @@ To create an anaconda environment where the scripts should run smoothly:
 
 ## Basic directory structure
 - **bash**: contains shell scripts that describe the workflow. In a bash environment, you can run all the steps for a specific task in a row.
-- **configs**: contains configuration .yml files for different tasks. The config file matches the script name in bash for easier identification.
-- **data**: where data for processing will get stored. Might not be there at the beginning, but will get created the first time it is needed.
-- **figures**: where images get stored. Might not be there at the beginin,g but will get created the first time it is needed.
+- **configs**: contains configuration .yml file and the python conda environment that makes everything work.
 - **scripts**: where working scripts are stored - gets called within bash scripts.
 - **util**: custom functions.
 
@@ -29,7 +27,7 @@ If `downlad_jason3_data` is `True` in the config file:
 - downloads the last (4) cycles of JASON-3 satellite data.
 - extracts latitude, longitude, and time data.
 
-If `predict_overpass_at_location` is `True`:
+If `jason_predict_overpass_at_location` is `True`:
 - for a given point, find the next (5) return times of the satellite overpass based on previous data.
 
 
