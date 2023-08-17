@@ -23,7 +23,6 @@ To create an anaconda environment where the scripts should run smoothly:
 If download_saildrone_data is True in the config file:
 - downloads the latest nc files for the saildrones specified in the config file.
 
-
 ## Predicting JASON ovelpass times
 **bash/download_predic_jason_path.sh**
 If downlad_jason3_data is True in the config file:
@@ -33,7 +32,14 @@ If downlad_jason3_data is True in the config file:
 If predict_overpass_at_location is True:
 - for a given point, find the next (5) return times of the satellite overpass based on previous data.
 
+
 ### IN PROGRESS
+## Comparing latest observations at a buoy to saildrone
+**/bash/download_buoy_data.sh**
+If download_buoy_data is True in the config file:
+- downloads the latest data at the specified NDBC buoy locations.
+
+
 ## Downloading atcf forecast and best track data
 **bash/download_and_process_atcf_hurricane_data.sh**
 -  ```configs/download_and_process_hurricane_data.yml``` determines what to process and where to store it.

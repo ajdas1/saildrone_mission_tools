@@ -3,10 +3,6 @@ import sys
 import urllib.request
 import urllib.error
 
-import importlib
-import paths
-
-importlib.reload(paths)
 from paths import check_for_dir_create, read_yaml_config, repo_path, saildrone_archive
 
 

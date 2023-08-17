@@ -1,0 +1,3 @@
+download_buoy_data: True
+download_buoy_data_path: "data/buoy"
+buoys: 41002, 41049
