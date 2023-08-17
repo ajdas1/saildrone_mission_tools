@@ -18,11 +18,13 @@ To create an anaconda environment where the scripts should run smoothly:
 
 ## Downloading the latest saildrone data (low-res)
 **bash/download_saildrone_data.sh**
+
 If `download_saildrone_data` is `True` in the config file:
 - downloads the latest nc files for the saildrones specified in the config file.
 
 ## Predicting JASON ovelpass times
 **bash/download_predic_jason_path.sh**
+
 If `downlad_jason3_data` is `True` in the config file:
 - downloads the last (4) cycles of JASON-3 satellite data.
 - extracts latitude, longitude, and time data.
