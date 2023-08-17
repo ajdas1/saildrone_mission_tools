@@ -31,7 +31,7 @@ jason_number_of_future_overpasses: 10
 
 # compare_buoy_saildrone
 compare_buoy_saildrone: True
-comparison_buoy: 41049
-comparison_saildrone: 1065
-comparison_start_time: 2023-08-01 00:00:00
-comparison_end_time: 2023-08-08 00:00:00
+comparison_buoy: 41002
+comparison_saildrone: 1057
+comparison_start_time: 2023-08-08 00:00:00
+comparison_end_time: 2023-08-18 00:00:00
