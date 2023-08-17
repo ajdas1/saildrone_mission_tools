@@ -6,7 +6,7 @@ import urllib.error
 from paths import check_for_dir_create, read_yaml_config, repo_path, saildrone_archive
 
 
-config_file = f"{repo_path}{os.sep}configs{os.sep}download_saildrone_data.yml"
+config_file = f"{repo_path}{os.sep}configs{os.sep}config.yml"
 config = read_yaml_config(config_file)
 all_saildrones = config["all_saildrones"].split(", ")
 update_saildrones = config["update_saildrones"].split(", ")

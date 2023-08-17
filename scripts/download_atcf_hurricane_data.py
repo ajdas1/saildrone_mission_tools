@@ -8,9 +8,7 @@ import urllib.error
 from bs4 import BeautifulSoup
 from paths import atcf_archive, check_for_dir_create, read_yaml_config, repo_path
 
-config_file = (
-    f"{repo_path}{os.sep}configs{os.sep}download_and_process_atcf_hurricane_data.yml"
-)
+config_file = f"{repo_path}{os.sep}configs{os.sep}config.yml"
 config = read_yaml_config(config_file)
 
 if not config["download_nhc_atcf_data"]:
@@ -31,7 +29,7 @@ bdecks_dir = (
 check_for_dir_create(adecks_dir)
 check_for_dir_create(bdecks_dir)
 
-for year in range(config["start_year"], config["end_year"]):
+for year in range(config["atcf_start_year"], config["atcf_end_year"]):
     print(f"Downloading ATCF data for year {year}")
     current_url = f"{atcf_archive}{year}{os.sep}"
     page = requests.get(current_url).text

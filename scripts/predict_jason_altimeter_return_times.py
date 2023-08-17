@@ -9,17 +9,17 @@ from netCDF4 import Dataset
 from paths import check_for_dir_create, read_yaml_config, repo_path
 from projection import great_circle_distance
 
-config_file = f"{repo_path}{os.sep}configs{os.sep}download_predict_jason_path.yml"
+config_file = f"{repo_path}{os.sep}configs{os.sep}config.yml"
 config = read_yaml_config(config_file)
 
 jason_dir = f"{repo_path}{os.sep}" + f"{config['download_jason3_data_path']}"
 
-if not config["predict_overpass_at_location"]:
+if not config["jason_predict_overpass_at_location"]:
     sys.exit()
 
 
-point_lat = config["predicted_point_lat"]
-point_lon = config["predicted_point_lon"]
+point_lat = config["jason_predicted_point_lat"]
+point_lon = config["jason_predicted_point_lon"]
 
 check_for_dir_create(jason_dir)
 fls = sorted([f"{jason_dir}/{fl}" for fl in os.listdir(jason_dir)])
@@ -76,7 +76,7 @@ return_times = [
     nearest_time + timedelta(seconds=avg_return_seconds * n) for n in range(100)
 ]
 return_times = [tm for tm in return_times if tm >= current_time][
-    : config["number_of_future_overpasses"]
+    : config["jason_number_of_future_overpasses"]
 ]
 return_times = [tm.strftime("%Y-%m-%d %H:%M:%S") for tm in return_times]
 print("Return times for the chosen location: \n     " + "\n     ".join(return_times))

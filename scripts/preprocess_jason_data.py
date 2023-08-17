@@ -6,7 +6,7 @@ from netCDF4 import Dataset
 from paths import check_for_dir_create, read_yaml_config, repo_path
 
 
-config_file = f"{repo_path}{os.sep}configs{os.sep}download_predict_jason_path.yml"
+config_file = f"{repo_path}{os.sep}configs{os.sep}config.yml"
 config = read_yaml_config(config_file)
 
 if not config["download_jason3_data"]:

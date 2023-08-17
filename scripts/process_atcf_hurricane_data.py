@@ -14,9 +14,7 @@ from atcf_processing import (
 )
 from paths import check_for_dir_create, read_yaml_config, repo_path
 
-config_file = (
-    f"{repo_path}{os.sep}configs{os.sep}download_and_process_atcf_hurricane_data.yml"
-)
+config_file = f"{repo_path}{os.sep}configs{os.sep}config.yml"
 config = read_yaml_config(config_file)
 
 # forecasts
@@ -35,7 +33,7 @@ check_for_dir_create(adecks_dir)
 check_for_dir_create(bdecks_dir)
 
 
-preprocess_wind_radii = config["preprocess_wind_radii"]
+preprocess_wind_radii = config["preprocess_atcf_wind_radii"]
 
 
 if config["download_nhc_atcf_data"]:

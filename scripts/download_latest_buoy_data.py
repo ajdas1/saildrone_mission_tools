@@ -3,13 +3,9 @@ import sys
 import urllib.request
 import urllib.error
 
-import importlib
-import paths
-
-importlib.reload(paths)
 from paths import check_for_dir_create, read_yaml_config, repo_path, buoy_archive
 
-config_file = f"{repo_path}{os.sep}configs{os.sep}download_buoy_data.yml"
+config_file = f"{repo_path}{os.sep}configs{os.sep}config.yml"
 config = read_yaml_config(config_file)
 buoys = config["buoys"].split(", ")
 
