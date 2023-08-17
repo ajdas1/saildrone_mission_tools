@@ -11,3 +11,8 @@
 
 # figure files
 **.png
+
+
+
+# local files
+**/.DS_Store
