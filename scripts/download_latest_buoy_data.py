@@ -26,7 +26,9 @@ for buoy in buoys:
     if len(buoy) > 0:
         print(f"Downloading the latest data for buoy {buoy}.")
         try:
-            urllib.request.urlretrieve(f"{buoy_archive}{buoy}.txt", f"{buoy_dir}{os.sep}buoy_{buoy}.txt")
+            urllib.request.urlretrieve(
+                f"{buoy_archive}{buoy}.txt", f"{buoy_dir}{os.sep}buoy_{buoy}.txt"
+            )
         except urllib.error.HTTPError:
             print("Could not download the latest data.")
             continue
