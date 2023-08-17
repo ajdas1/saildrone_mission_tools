@@ -6,7 +6,7 @@ from typing import Dict
 repo_name = "saildrone_mission_tools"
 atcf_archive = "https://ftp.nhc.noaa.gov/atcf/archive/"
 url_glider_franklin = "http://dockserver.skio.uga.edu/images/franklin/franklin_wptlatlonDate.txt"
-url_glider_unit1091 = "http://dockserver.skio.uga.edu/images/franklin/franklin_wptlatlonDate.txt"
+url_glider_unit1091 = "http://dockserver.skio.uga.edu/images/unit_1091/unit_1091_wptlatlonDate.txt"
 jason3_archive = "https://www.ncei.noaa.gov/data/oceans/jason3/gdr/gdr/"
 
 def repository_path() -> str:
