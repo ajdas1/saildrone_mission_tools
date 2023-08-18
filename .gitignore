@@ -10,12 +10,16 @@
 
 
 # figure files
-**.png
+/figures/**
 
 
 
 # local files
 **/.DS_Store
+
+
+# pdf files
+**.pdf
 
 # shape files
 **.dbf

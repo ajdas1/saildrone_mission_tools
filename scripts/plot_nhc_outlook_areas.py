@@ -3,6 +3,7 @@ import os
 import pandas as pd
 import pytz
 import sys
+import warnings
 
 from atcf_processing import count_overlapping_features, download_outlook_shapefile, read_shapefile_areas, split_storms_into_wind_radii, subset_btk_in_region, unzip_shapefile
 from conversions import convert_time_to_utc
@@ -11,7 +12,7 @@ from paths import check_for_dir_create, read_yaml_config, repo_path
 from plotting import plot_shapefile, plot_shapefile_btkstart
 from read_file import read_all_btks, read_saildrone_latest_position
 
-
+warnings.filterwarnings('ignore')
 
 config_file = f"{repo_path}{os.sep}configs{os.sep}config.yml"
 config = read_yaml_config(config_file)
@@ -34,7 +35,7 @@ outlook_fls = unzip_shapefile(filename=outlook_fl, overwrite=True, remove=True)
 sd_position = read_saildrone_latest_position()
 shapes = read_shapefile_areas(directory=outlook_fls)
 shapes = shapes[shapes.BASIN == "Atlantic"].sort_values(by="AREA").reset_index(drop=True)
-fig_dir = f"{repo_path}{os.sep}{config['figure_path']}{os.sep}" + f"nhc_outlook{os.sep}" + f"{outlook_time.strftime('%Y%m%d%H%M')}"
+fig_dir = f"{repo_path}{os.sep}{config['figure_path']}{os.sep}" + f"{config['outlook_figure_path']}{os.sep}" + f"{outlook_time.strftime('%Y%m%d%H%M')}"
 check_for_dir_create(fig_dir)
 
 print("     Plotting shapefiles.")
@@ -82,19 +83,6 @@ for region in range(len(shapes)):
             storm_overlap["percentage"] = storm_overlap["count"] / len(btk_sub) * 100
 
             plot_shapefile_btkstart(
-                shapefile_data=shapes.iloc[region], wind_overlap=storm_overlap, n=area_num, n_storms=len(btk_region), time=outlook_time, sd_data=sd_position, savedir=fig_dir, title_save_add=f"_day{day:02d}", percentage = False
+                shapefile_data=shapes.iloc[region], wind_overlap=storm_overlap, n=area_num, n_storms=len(btk_sub), time=outlook_time, sd_data=sd_position, savedir=fig_dir, title_save_add=f"_day{day:02d}", percentage = False
                 ) 
             
-        else:                
-            n_days_max = 10
-            btk_region = btks_subset_regions_ts[region]["start"]
-            storm = split_storms_into_wind_radii(storm_wr=btk_region)
-            storm_overlap = count_overlapping_features(geo_dataset=storm)
-            storm_overlap["percentage"] = storm_overlap["count"] / len(btk_region) * 100
-            tmp = pd.DataFrame([], columns=storm_overlap.columns)
-            for day in range(1, n_days_max+1):
-                plot_shapefile_btkstart(
-                    shapefile_data=shapes.iloc[region], wind_overlap=storm_overlap, n=area_num, n_storms=len(btk_region), time=outlook_time, sd_data=sd_position, savedir=fig_dir, title_save_add=f"_day{day:02d}", percentage = False
-                    ) 
-
-

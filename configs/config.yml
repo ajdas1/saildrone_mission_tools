@@ -30,14 +30,25 @@ comparison_buoy: 42099
 comparison_saildrone: 1083
 comparison_start_time: 2023-08-05 00:00:00
 comparison_end_time: 2023-08-12 00:00:00
+comparison_figure_path: buoy_comparison
 
 # download_atcf_hurricane_data
-download_nhc_atcf_data: True
+download_nhc_atcf_data: False
 download_nhc_atcf_data_path: data/hurricane_forecasts
 atcf_start_year: 2002
 atcf_end_year: 2023
-preprocess_atcf_wind_radii: True
+preprocess_atcf_wind_radii: False
 
-# process_nhc_outlook_areas
+# plot_nhc_outlook_areas
 local_timezone: US/Eastern
 download_nhc_outlook_data_path: data/hurricane_forecasts/outlooks
+outlook_figure_path: nhc_outlook
+
+
+# create_nhc_outlook_areas_pdf_summary
+summary_figure_path: latest
+summary_pdf_path: nhc_outlook_summary
+document_author: Ajda Savarin
+summary_figure_colorbar: configs/colorbar.png
+remove_original_data_folder: True
+remove_original_figure_folder: True

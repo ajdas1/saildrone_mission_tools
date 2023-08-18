@@ -49,7 +49,7 @@ def read_yaml_config(filename: str) -> Dict:
     return config
 
 
-def check_for_dir_create(dirname: str):
+def check_for_dir_create(dirname: str, empty: bool = False):
     """
     Checks if directories along dirname exist, and if not, it creates them.
     """
@@ -60,3 +60,8 @@ def check_for_dir_create(dirname: str):
             dir_path = f"{os.sep}".join(dirs[: dir + 1])
             if not os.path.isdir(dir_path):
                 os.mkdir(dir_path)
+    
+    elif empty == True: 
+        fls = os.listdir(dirname)
+        for fl in fls:
+            os.remove(f"{dirname}{os.sep}{fl}")

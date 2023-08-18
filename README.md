@@ -43,7 +43,6 @@ If `download_buoy_data` is `True` in the config file:
 - downloads the latest data at the specified NDBC buoy locations.
 
 
-### IN PROGRESS
 ## Creating NHC 7-day outlook figures with historical storms
 **bash/process_nhc_outlook_areas.sh**
 If `download_nhc_atcf_data` and `preprocess_atcf_wind_radii` are `True`:
@@ -51,8 +50,14 @@ If `download_nhc_atcf_data` and `preprocess_atcf_wind_radii` are `True`:
 - renames the files for easier comprehension and cleans them up: *basin_year-storm.dat*.
 - separates data into different wind speed radii (34-, 50, and 64-kt) products.
 - downloads the latest NHC outlook advisories and compiles historical storms that started within the highlighted regions. Makes figures.
-- *creates a PDF to summarize the action*
-
+- create a PDF document with all the figures
 
 To create the pdf files, there's some additional software that needs to be installed: 
-- *imagemagick* <https://imagemagick.org/script/download.php>
+- *ImageMagick* <https://imagemagick.org/script/download.php>
+- *pdflatex* <https://www.latex-project.org/get/>
+
+
+### IN PROGRESS
+For pdf creation -- see if you can add in forecast tracks for Invests, etc.
+
+
