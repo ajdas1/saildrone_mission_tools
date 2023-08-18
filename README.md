@@ -35,6 +35,7 @@ If `jason_predict_overpass_at_location` is `True`:
 
 ## Comparing latest observations at a buoy to saildrone
 **/bash/download_buoy_data.sh**
+
 If `download_buoy_data` is `True` in the config file:
 - downloads the latest data at the specified NDBC buoy locations.
 

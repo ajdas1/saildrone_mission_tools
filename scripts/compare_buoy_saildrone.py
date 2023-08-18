@@ -86,6 +86,6 @@ data = data[
 
 filename = (
     f"{figure_dir}{os.sep}"
-    + f"Comparison_SD{config['comparison_saildrone']}_B{config['comparison_buoy']}.png"
+    + f"Comparison_SD{config['comparison_saildrone']}_B{config['comparison_buoy']}_" + f"{config['comparison_start_time'].strftime('%Y-%m-%d')}_{config['comparison_end_time'].strftime('%Y-%m-%d')}.png"
 )
 plot_saildrone_buoy_comparison(data=data, config=config, filename=filename)

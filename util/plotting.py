@@ -163,7 +163,7 @@ def plot_saildrone_buoy_comparison(data: pd.DataFrame, config: dict, filename: s
 
     ax_dist.xaxis.set_major_formatter(mdates.DateFormatter("%b-%d"))
     ax_dist.xaxis.set_minor_locator(mdates.DayLocator(interval=1))
-    ax_dist.xaxis.set_major_locator(mdates.DayLocator(interval=3))
+    ax_dist.xaxis.set_major_locator(mdates.DayLocator(interval=2))
     ax_dist.set_xlim(config["comparison_start_time"], config["comparison_end_time"])
     ax_dist.set_ylim(bottom=0)
     ax_wdir.set_ylim(0, 360)
