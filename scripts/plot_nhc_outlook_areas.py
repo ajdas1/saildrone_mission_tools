@@ -1,6 +1,7 @@
 import importlib
 
 import os
+import pandas as pd
 import pytz
 import sys
 
@@ -68,11 +69,44 @@ for region in range(len(shapes)):
     storm_overlap["percentage"] = storm_overlap["count"] / len(btk_region) * 100
 
     plot_shapefile_btkstart(
-        shapefile_data=shapes.iloc[region], wind_overlap=storm_overlap,
-        n=area_num, n_storms=len(btk_region), time=outlook_time, sd_data=sd_position, savedir=fig_dir, percentage = False
+        shapefile_data=shapes.iloc[region], wind_overlap=storm_overlap, n=area_num, n_storms=len(btk_region), time=outlook_time, sd_data=sd_position, savedir=fig_dir, percentage = False
         )
 
 
+print("     Plotting best_track overlap - one day at a time")
+for region in range(len(shapes)):
+    area_num = shapes.iloc[region].AREA
+    btk_region = btks_subset_regions_ts[region]["start"]
+    btk_region_tmp = []
+    for storm in btk_region:
+        storm["StormDay"] = (((storm["Date"] - storm["Date"].iloc[0]) / pd.Timedelta(hours=1)) // 24) + 1
+        btk_region_tmp.append(storm)
+    btk_region = btk_region_tmp
 
+    if len(btk_region) > 0:
+        n_days = [int(max(tmp.StormDay)) for tmp in btk_region]
+        n_days_max = 10
+        for day in range(1, n_days_max+1):
+            btk_sub = [storm for idx, storm in enumerate(btk_region) if day <= n_days[idx]]
+            btk_sub = [storm[storm.StormDay == day] for storm in btk_sub]
+            storm = split_storms_into_wind_radii(storm_wr=btk_sub)
+            storm_overlap = count_overlapping_features(geo_dataset=storm)
+            storm_overlap["percentage"] = storm_overlap["count"] / len(btk_sub) * 100
+
+            plot_shapefile_btkstart(
+                shapefile_data=shapes.iloc[region], wind_overlap=storm_overlap, n=area_num, n_storms=len(btk_region), time=outlook_time, sd_data=sd_position, savedir=fig_dir, title_save_add=f"_day{day:02d}", percentage = False
+                ) 
+            
+        else:                
+            n_days_max = 10
+            btk_region = btks_subset_regions_ts[region]["start"]
+            storm = split_storms_into_wind_radii(storm_wr=btk_region)
+            storm_overlap = count_overlapping_features(geo_dataset=storm)
+            storm_overlap["percentage"] = storm_overlap["count"] / len(btk_region) * 100
+            tmp = pd.DataFrame([], columns=storm_overlap.columns)
+            for day in range(1, n_days_max+1):
+                plot_shapefile_btkstart(
+                    shapefile_data=shapes.iloc[region], wind_overlap=storm_overlap, n=area_num, n_storms=len(btk_region), time=outlook_time, sd_data=sd_position, savedir=fig_dir, title_save_add=f"_day{day:02d}", percentage = False
+                    ) 
 
 
