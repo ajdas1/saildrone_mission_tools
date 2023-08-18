@@ -1,10 +1,6 @@
 
 
-
-
-python ../scripts/download_atcf_hurricane_data.py
-
-python ../scripts/process_atcf_hurricane_data.py
+./download_and_process_atcf_hurricane_data.sh
 
 python ../scripts/download_latest_saildrone_data.py
 

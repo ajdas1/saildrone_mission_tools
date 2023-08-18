@@ -1,9 +1,12 @@
 # saildrone_mission_tools
 Helpful tools for Saildrone hurricane mission management.
 
-To create an anaconda environment where the scripts should run smoothly:
+To create an anaconda environment where the scripts should run smoothly, and activate it:
 
-```conda env create -f configs/environment.yml```
+```
+conda env create -f configs/environment.yml
+conda activate sd_mission_management
+```
 
 ## Basic directory structure
 - **bash**: contains shell scripts that describe the workflow. In a bash environment, you can run all the steps for a specific task in a row.
@@ -39,10 +42,15 @@ If `jason_predict_overpass_at_location` is `True`:
 If `download_buoy_data` is `True` in the config file:
 - downloads the latest data at the specified NDBC buoy locations.
 
+
 ### IN PROGRESS
-## Downloading atcf forecast and best track data
-**bash/download_and_process_atcf_hurricane_data.sh**
--  ```configs/download_and_process_hurricane_data.yml``` determines what to process and where to store it.
-- downloads the atcf forecasts and best track data (default from 2001 to 2023).
-- renames the files for easier comprehension: *basin_year-storm.dat*.
+## Creating NHC 7-day outlook figures with historical storms
+**bash/process_nhc_outlook_areas.sh**
+
+If `download_nhc_atcf_data` and `preprocess_atcf_wind_radii` are `True`:
+- downloads the atcf forecasts and best track data (default from 2002 to 2023).
+- renames the files for easier comprehension and cleans them up: *basin_year-storm.dat*.
+- separates data into different wind speed radii (34-, 50, and 64-kt) products.
+- downloads the latest NHC outlook advisories and compiles historical storms that started within the highlighted regions. Makes figures.
+- *creates a PDF to summarize the action*
 
