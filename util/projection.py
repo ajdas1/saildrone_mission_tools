@@ -1,11 +1,18 @@
+
+import cartopy.crs as ccrs
+import matplotlib.pyplot as plt
+import matplotlib.ticker as mticker
+import numpy as np
 import requests
 
 from bs4 import BeautifulSoup
-
+from cartopy.feature import COASTLINE, LAND
+from cartopy.mpl.gridliner import LONGITUDE_FORMATTER, LATITUDE_FORMATTER
 from math import radians, sin, cos, acos
 from paths import url_buoy_info
+from typing import List
 
-proj = "A"
+proj = ccrs.PlateCarree(central_longitude = 0)
 
 
 def great_circle_distance(
@@ -40,5 +47,37 @@ def get_ndbc_buoy_position(config: dict) -> dict:
     return {"lon": buoy_longitude, "lat": buoy_latitude}
 
 
-def set_cartopy_projection_atlantic():
-    ...
+def set_cartopy_projection_atlantic(
+        ax: plt.Axes,
+        extent: List[float] = [-111, 11, -5, 55],
+        xticks: np.ndarray = np.arange(-120, 30, 10),
+        yticks: np.ndarray = np.arange(-10, 61, 10),
+        ylabel: str = "top"
+    ):
+    #ax.coastlines(color="k", zorder=1)
+    ax.add_feature(COASTLINE.with_scale('10m'), edgecolor="k")
+    ax.add_feature(LAND.with_scale('10m'), facecolor='.8')
+    gl = ax.gridlines(
+        crs = proj,
+        draw_labels = True,
+        linewidth = 1,
+        color = "gray",
+        alpha = 1,
+        linestyle = "--"
+    )
+    gl.xlocator = mticker.FixedLocator(xticks)
+    gl.ylocator = mticker.FixedLocator(yticks)
+    gl.xformatter = LONGITUDE_FORMATTER
+    gl.yformatter = LATITUDE_FORMATTER
+    if ylabel == "top":
+        gl.top_labels = True
+    else:
+        gl.top_labels = False
+
+    if ylabel == "bottom":
+        gl.bottom_labels = True
+    else:
+        gl.bottom_labels = False
+    gl.right_labels = False
+
+    ax.set_extent(extent, crs=proj)

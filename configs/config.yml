@@ -1,27 +1,20 @@
 
-figure_path: "figures"
+figure_path: figures
 
 # download_latest_buoy_data
 download_buoy_data: True
-download_buoy_data_path: "data/buoy"
+download_buoy_data_path: data/buoy
 buoys: 41002, 41049, 41052, 42099
 
 # download_latest_saildrone_data
 download_saildrone_data: True
-download_saildrone_data_path: "data/saildrone"
+download_saildrone_data_path: data/saildrone
 all_saildrones: 1031, 1036, 1040, 1041, 1042, 1045, 1057, 1064, 1065, 1068, 1069, 1083
 update_saildrones: 1031, 1036, 1040, 1045, 1057, 1064, 1065, 1068, 1069, 1083
 
-# download_atcf_hurricane_data
-download_nhc_atcf_data: True
-download_nhc_atcf_data_path: "data/hurricane_forecasts"
-atcf_start_year: 2001
-atcf_end_year: 2023
-preprocess_atcf_wind_radii: True
-
 # download_jason_data
 download_jason3_data: False
-download_jason3_data_path: "data/satellite/jason3"
+download_jason3_data_path: data/satellite/jason3
 jason_number_most_recent_cycles_to_download: 4
 
 # predict_jason_altimeter_return_times
@@ -37,3 +30,14 @@ comparison_buoy: 42099
 comparison_saildrone: 1083
 comparison_start_time: 2023-08-05 00:00:00
 comparison_end_time: 2023-08-12 00:00:00
+
+# download_atcf_hurricane_data
+download_nhc_atcf_data: True
+download_nhc_atcf_data_path: data/hurricane_forecasts
+atcf_start_year: 2002
+atcf_end_year: 2023
+preprocess_atcf_wind_radii: True
+
+# process_nhc_outlook_areas
+local_timezone: US/Eastern
+download_nhc_outlook_data_path: data/hurricane_forecasts/outlooks

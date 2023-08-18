@@ -16,3 +16,11 @@
 
 # local files
 **/.DS_Store
+
+# shape files
+**.dbf
+**.prj
+**.shp
+**.shp.xml
+**.shx
+**.rtf

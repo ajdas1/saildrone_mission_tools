@@ -3,12 +3,12 @@ import pandas as pd
 import sys
 
 
-from conversions import read_ndbc_buoy_format, read_saildrone_format
 from metpy.calc import relative_humidity_from_dewpoint
 from metpy.units import units
 from paths import check_for_dir_create, read_yaml_config, repo_path
 from projection import get_ndbc_buoy_position, great_circle_distance
 from plotting import plot_saildrone_buoy_comparison
+from read_file import read_ndbc_buoy_format, read_saildrone_format
 
 
 config_file = f"{repo_path}{os.sep}configs{os.sep}config.yml"

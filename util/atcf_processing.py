@@ -1,10 +1,26 @@
+import geopandas as gpd
 import numpy as np
 import os
 import pandas as pd
+import pytz
 import shapely.geometry as shp
+import urllib.error
+import urllib.request
+import zipfile
 
+
+import importlib
+import paths
+importlib.reload(paths)
+import conversions
+importlib.reload(conversions)
+
+from bs4 import BeautifulSoup
 from cartopy.geodesic import Geodesic
-from paths import repo_path
+from conversions import convert_time_to_utc
+from datetime import datetime, timedelta
+from paths import nhc_outlook_archive, repo_path
+from shapely.ops import polygonize
 from typing import Any, Dict, List
 
 geod = Geodesic()
@@ -112,6 +128,145 @@ column_types = {
     "y": str,
     "yy": str,
 }
+
+
+def count_overlapping_features(geo_dataset: gpd.geopandas.GeoDataFrame):
+
+    polygon_bounds = geo_dataset.geometry.convex_hull.exterior.buffer(1e6).unary_union
+    polygon_bounds = geo_dataset.geometry.exterior.unary_union
+    new_polygons = list(polygonize(polygon_bounds))
+    new_gdf = gpd.GeoDataFrame(geometry=new_polygons)
+    new_gdf["id"] = range(len(new_gdf))
+
+    new_gdf_centroid = new_gdf.copy()
+    new_gdf_centroid['geometry'] = new_gdf.centroid
+    new_gdf_centroid = new_gdf_centroid.set_crs("epsg:3857")
+    overlapcount = gpd.sjoin(new_gdf_centroid, geo_dataset)
+    overlapcount = overlapcount.groupby(['id'])['index_right'].count().rename('count').reset_index()
+    out_gdf = pd.merge(new_gdf,overlapcount)
+
+    return out_gdf
+
+
+
+
+
+def split_storms_into_wind_radii(storm_wr: gpd.geopandas.GeoDataFrame):
+    storm_wr = [gpd.GeoDataFrame(bdw) for bdw in storm_wr]
+    storm_wr = [bdw.set_geometry("WindRadii") for bdw in storm_wr]
+    tmp = []
+    for storm in storm_wr:
+        tmp_union = storm.WindRadii.unary_union
+        if isinstance(tmp_union, shp.polygon.Polygon):
+            tmp.append([tmp_union])
+        elif tmp_union is not None:
+            tmp_independent = [geom for geom in tmp_union.geoms]
+            tmp.append(tmp_independent)
+    tmp = [i for j in tmp for i in j]
+    storm = gpd.GeoDataFrame(tmp, columns=["Storms"])
+    storm = storm.set_geometry("Storms")
+    storm = storm.set_crs("epsg:3857")
+
+    return storm
+
+
+
+def subset_btk_in_region(btk: pd.DataFrame, target_region: shp.Polygon, wr: int = 0, verbose: bool = True) -> dict:
+    btks_track = []
+    btks_start = []
+    for _, btk in enumerate(btk):
+        btk["InRange"] = btk["Center"].apply(target_region.contains)
+        if btk.InRange.sum() > 0:
+            btks_track.append(btk)
+            if btk.InRange.iloc[0]:
+                btks_start.append(btk)
+    
+    if verbose:
+        print(f"Storms that start in region: {len(btks_start)}")
+
+    return {
+        "start": btks_start,
+        "track": btks_track
+        }
+
+
+
+
+
+def get_info_from_filename(filename:str):
+    if "/" in filename:
+        filename = filename.split("/")[-1]
+    
+    storm_basin = filename[0:2]
+    storm_number = int(filename[8:10])
+    storm_year = int(filename[3:7])
+
+
+    return {
+        "basin": storm_basin,
+        "number": storm_number,
+        "year": storm_year
+    }
+
+
+
+def read_shapefile_areas(directory: str) -> gpd.GeoDataFrame:
+
+    fls = [fl for fl in os.listdir(directory) if ".shp" in fl and ".xml" not in fl]
+    fl_areas = [fl for fl in fls if "areas" in fl][0]
+
+    df_areas = gpd.read_file(f"{directory}/{fl_areas}")
+    df_areas = df_areas.set_geometry("geometry")
+
+    return df_areas
+
+
+def unzip_shapefile(filename: str, savefile: str = "", overwrite: bool = True, remove: bool = True) -> str:
+
+    if savefile == "":
+        savefile = filename[:-4]
+    
+    if not os.path.isdir(savefile):
+        os.mkdir(savefile)
+    else:
+        if not overwrite:
+            print("Directory for zip extraction exists. Did not overwrite.")
+            return
+
+    with zipfile.ZipFile(filename, "r") as zip_ref:
+        zip_ref.extractall(savefile)
+
+    if remove:
+        os.remove(filename)
+    
+    return savefile
+
+
+
+def download_outlook_shapefile(time: str, savedir: str) -> List[str]:
+    url_data = urllib.request.urlopen(nhc_outlook_archive).read()
+    soup = BeautifulSoup(url_data, "html.parser")    
+    files = [nhc_outlook_archive + node.get('href') for node in soup.find_all("a")]
+    files = [path for path in files if len(path.split("/")) == 8 and "latest" not in path]
+    modified_time = [convert_time_to_utc(time=datetime.strptime(tm.split("/")[-2], "%Y%m%d%H%M"), timezone=pytz.timezone("UTC")) for tm in files]
+
+    time_threshold_hours = 24
+    matching_times = [tm for tm in modified_time if tm >= (time - timedelta(hours=time_threshold_hours))]
+    if len(matching_times) > 0:
+        most_recent_time = max(matching_times)
+        most_recent_idx = modified_time.index(most_recent_time)
+        most_recent_file = files[most_recent_idx]
+        filename = f"{savedir}/{most_recent_time.strftime('%Y%m%d%H%M')}.zip"
+
+        try:
+            urllib.request.urlretrieve(most_recent_file+"gtwo_shapefiles.zip", filename)
+            return filename, most_recent_time
+        except urllib.error.HTTPError:
+            pass
+    
+    else:
+        return None, None
+
 
 
 def fix_atcf_latitude(val: str) -> float:

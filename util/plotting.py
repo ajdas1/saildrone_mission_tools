@@ -1,9 +1,226 @@
+
+
+
+
+import geopandas as gpd
 import matplotlib.dates as mdates
 import matplotlib.pyplot as plt
+import numpy as np
+import os
 import pandas as pd
 
+import importlib
+import conversions
+importlib.reload(conversions)
+import projection
+importlib.reload(projection)
+
+
+
+from conversions import get_centroid_coordinates
+from datetime import datetime
 from matplotlib import rc
+from matplotlib.colors import ListedColormap
 from matplotlib.gridspec import GridSpec
+from projection import proj, set_cartopy_projection_atlantic
+from typing import List
+
+
+
+
+
+
+def plot_shapefile_btkstart(
+        shapefile_data: pd.DataFrame, wind_overlap: dict, 
+        n: int, n_storms: int, time: datetime, savedir: str,
+        sd_data: dict = None, percentage: bool = False, title_save_add: str = "",
+    ) -> plt.figure:
+
+    if not isinstance(shapefile_data, gpd.geodataframe.GeoDataFrame):
+        shapefile_data = gpd.GeoDataFrame(shapefile_data).T
+        shapefile_data = shapefile_data.set_geometry("geometry")
+
+    if percentage:
+        label_title = "%"
+        save_add = "perc_"
+        vmin = 0
+        vmax = 20    
+        cmap = plt.cm.tab20b(np.linspace(0, 1, 20))
+        cmap = ListedColormap(cmap)
+        overlap_column = "percentage"
+        title_add = f"\n% of storms starting in area (n={n_storms})"
+    else:
+        label_title = "#"
+        save_add = ""
+        vmin = 0
+        vmax = 10
+        cmap = plt.cm.turbo(np.linspace(0, 1, 10))
+        cmap = ListedColormap(cmap)
+        overlap_column = "count"
+        title_add = f"\n# of storms starting in area (n={n_storms})"
+    
+    area_colors = find_outlook_area_color(shapefile_data=shapefile_data)
+    shapefile_data["coords"] = shapefile_data["geometry"].apply(get_centroid_coordinates)
+
+    fig = plt.figure(figsize = (12, 5))
+    ax = fig.add_subplot(111, projection=proj)
+
+    shapefile_data["geometry"].plot(ax=ax, color=area_colors, alpha=.5, edgecolor="k")
+    for _, row in shapefile_data.iterrows():
+        ax.annotate(text=row['AREA'], xy=row["coords"], ha="center", va="center", fontweight="bold", fontsize=10)
+
+    for idx, row in shapefile_data.iterrows():
+        annotate_text = f"Area {row['AREA']}\n2 day: {row['PROB2DAY']}\n7 day: {row['PROB7DAY']}"
+        ax.annotate(text=annotate_text, xy=(-110 + idx*20, 3), ha="left", va="top", backgroundcolor=(1, 1, 1, .5), fontsize=10)
+
+    legend_kwds = {"pad": 0.015, "shrink": 0.99, "label": f"storm {label_title}"}
+    if len(wind_overlap) > 0:
+        wind_overlap.plot(
+            column=overlap_column, ax=ax, legend=False, alpha=.8, 
+            vmin=vmin, vmax=vmax, legend_kwds=legend_kwds, cmap=cmap
+        )
+
+    ax.plot([130, 140], [0, 1], c="yellow", alpha=.5, lw=10, label="Low (<40%)")
+    ax.plot([130, 140], [0, 1], c="orange", alpha=.5, lw=10, label="Medium (40-60%)")
+    ax.plot([130, 140], [0, 1], c="red", alpha=.5, lw=10, label="High (>60%)")
+
+    if sd_data is not None:
+        for sd in sd_data:
+            ax.plot(sd_data[sd]["lon"], sd_data[sd]["lat"], "om", markersize=2, zorder=10)
+            ax.arrow(sd_data[sd]["lon"], sd_data[sd]["lat"], 
+                np.cos(np.deg2rad(90-sd_data[sd]["dir"])), np.sin(np.deg2rad(90-sd_data[sd]["dir"])), 
+                length_includes_head=True, head_width=0.5, color="m", head_length=0.5, zorder=10)
+        ax.plot(130, 0, "om", markersize=2, label="SD")
+
+    plot_saildrone_mission_domains(ax=ax)
+
+    ax.legend(loc=1)
+    set_cartopy_projection_atlantic(ax=ax, ylabel="bottom")
+    ax.set_title(f"7-day outlook areas: {time.strftime('%Y-%m-%d %H:%M')} UTC{title_add} ({title_save_add[1:]})")
+
+    plt.savefig(f"{savedir}{os.sep}outlook_areas_btks_{save_add}area{n}{title_save_add}.png", dpi=200, bbox_inches="tight")
+    plt.close("all")
+
+
+
+def find_outlook_area_color(shapefile_data: gpd.GeoDataFrame) -> List:
+    colors = []
+    for n in range(len(shapefile_data)):
+        current_area = shapefile_data.iloc[n]
+        if current_area.RISK7DAY == "Low":
+            colors.append("yellow")
+        elif current_area.RISK7DAY == "Medium":
+            colors.append("orange")
+        elif current_area.RISK7DAY == "High":
+            colors.append("red")
+    
+    return colors
+
+
+
+def plot_shapefile(shapefile_data: gpd.GeoDataFrame, time: datetime, savedir: str, sd_data: dict = None):
+
+    area_colors = find_outlook_area_color(shapefile_data=shapefile_data)
+
+
+    shapefile_data["coords"] = shapefile_data["geometry"].apply(get_centroid_coordinates)
+
+    fig = plt.figure(figsize = (12, 12))
+    ax = fig.add_subplot(111, projection=proj)
+
+    shapefile_data.plot(ax=ax, color=area_colors, alpha=.5, edgecolor="k")
+    for _, row in shapefile_data.iterrows():
+        ax.annotate(text=row['AREA'], xy=row["coords"], ha="center", va="center", fontweight="bold")
+
+    for idx, row in shapefile_data.iterrows():
+        annotate_text = f"Area {row['AREA']}\n2 day: {row['PROB2DAY']}\n7 day: {row['PROB7DAY']}"
+        ax.annotate(text=annotate_text, xy=(-110 + idx*20, 1.5), ha="left", va="top", fontweight="semibold", backgroundcolor=(1, 1, 1, .5))
+
+    ax.plot([130, 140], [0, 1], c="yellow", alpha=.5, lw=10, label="Low (<40%)")
+    ax.plot([130, 140], [0, 1], c="orange", alpha=.5, lw=10, label="Medium (40-60%)")
+    ax.plot([130, 140], [0, 1], c="red", alpha=.5, lw=10, label="High (>60%)")
+
+    if sd_data is not None:
+        for sd in sd_data:
+            ax.plot(sd_data[sd]["lon"], sd_data[sd]["lat"], "om", markersize=2, zorder=10)
+            ax.arrow(sd_data[sd]["lon"], sd_data[sd]["lat"], 
+                np.cos(np.deg2rad(90-sd_data[sd]["dir"])), np.sin(np.deg2rad(90-sd_data[sd]["dir"])), 
+                length_includes_head=True, head_width=0.5, color="m", head_length=0.5, zorder=10)
+        ax.plot(130, 0, "om", markersize=2, label="SD")
+
+
+    ax.legend()
+
+    plot_saildrone_mission_domains(ax=ax)
+
+    set_cartopy_projection_atlantic(ax=ax, ylabel="bottom")
+    ax.set_title(f"7-day outlook areas: {time.strftime('%Y-%m-%d %H:%M')} UTC")
+
+    plt.savefig(f"{savedir}{os.sep}outlook_areas.png", dpi=200, bbox_inches="tight")
+    plt.close("all")
+
+
+
+
+
+
+
+def plot_saildrone_mission_domains(ax: plt.axis):
+
+    # Mission Domain A
+    ax.plot([-55.11, -46.83], [20.40, 20.40], c="k", lw=.7)
+    ax.plot([-46.83, -46.85], [20.40, 13.50], c="k", lw=.7)
+    ax.plot([-46.85, -55.14], [13.50, 13.50], c="k", lw=.7)
+    ax.plot([-55.14, -55.11], [13.50, 20.40], c="k", lw=.7)
+    ax.text(-46.83, 20.40, "A", fontweight="semibold", ha="right", va="top", fontsize=6, zorder=20)
+    # Mission Domain B
+    ax.plot([-67.56, -65.50], [17.63, 17.63], c="k", lw=.7)
+    ax.plot([-65.50, -65.51], [17.63, 16.09], c="k", lw=.7)
+    ax.plot([-65.51, -67.57], [16.09, 16.09], c="k", lw=.7)
+    ax.plot([-67.57, -67.56], [16.09, 17.63], c="k", lw=.7)
+    ax.text(-65.50, 17.63, "B", fontweight="semibold", ha="right", va="top", fontsize=6, zorder=20)
+    # Mission Domain C
+    ax.plot([-66.80, -65.94], [21.80, 21.79], c="k", lw=.7)
+    ax.plot([-65.94, -65.90], [21.79, 18.77], c="k", lw=.7)
+    ax.plot([-65.90, -66.84], [18.77, 18.76], c="k", lw=.7)
+    ax.plot([-66.84, -66.80], [18.76, 21.80], c="k", lw=.7)
+    ax.text(-65.94, 21.79, "C", fontweight="semibold", ha="right", va="top", fontsize=6, zorder=20)
+    # Mission Domain D
+    ax.plot([-66.24, -63.23], [28.50, 28.51], c="k", lw=.7)
+    ax.plot([-63.23, -63.22], [28.51, 26.27], c="k", lw=.7)
+    ax.plot([-63.22, -66.22], [26.27, 26.26], c="k", lw=.7)
+    ax.plot([-66.22, -66.24], [26.26, 28.50], c="k", lw=.7)
+    ax.text(-63.23, 28.51, "D", fontweight="semibold", ha="right", va="top", fontsize=6, zorder=20)
+    # Mission Domain EE
+    ax.plot([-75.5, -74], [33, 33], c="k", lw=.7)
+    ax.plot([-74, -74], [33, 31.5], c="k", lw=.7)
+    ax.plot([-74, -75.5], [31.5, 31.5], c="k", lw=.7)
+    ax.plot([-75.5, -75.5], [31.5, 33], c="k", lw=.7)
+    ax.text(-74, 33, "EE", fontweight="semibold", ha="right", va="top", fontsize=6, zorder=20)
+    # Mission Domain F
+    ax.plot([-89, -83.85], [28, 28.74], c="k", lw=.7)
+    ax.plot([-83.85, -82.23], [28.74, 25.52], c="k", lw=.7)
+    ax.plot([-82.23, -88.34], [25.52, 25.80], c="k", lw=.7)
+    ax.plot([-88.34, -89], [25.80, 28], c="k", lw=.7)
+    ax.text(-88.34, 25.80, "F", fontweight="semibold", ha="right", va="top", fontsize=6, zorder=20)
+
+    # Mission Domain E
+    ax.plot([-78.87, -77.49], [32.66, 33.39], c="k", lw=.7)
+    ax.plot([-77.49, -76.68], [33.39, 34.07], c="k", lw=.7)
+    ax.plot([-76.68, -75.79], [34.07, 34.52], c="k", lw=.7)
+    ax.plot([-75.79, -75.50], [34.52, 34.40], c="k", lw=.7)
+    ax.plot([-75.50, -76.28], [34.40, 33.63], c="k", lw=.7)
+    ax.plot([-76.28, -77.17], [33.63, 32.84], c="k", lw=.7)
+    ax.plot([-77.17, -78.29], [32.84, 32.01], c="k", lw=.7)
+    ax.plot([-78.29, -79.02], [32.01, 31.54], c="k", lw=.7)
+    ax.plot([-79.02, -79.39], [31.54, 31.10], c="k", lw=.7)
+    ax.plot([-79.39, -79.73], [31.10, 30.65], c="k", lw=.7)
+    ax.plot([-79.73, -80.19], [30.65, 31.17], c="k", lw=.7)
+    ax.plot([-80.19, -79.77], [31.17, 31.94], c="k", lw=.7)
+    ax.plot([-79.77, -78.87], [31.94, 32.66], c="k", lw=.7)
+    ax.text(-75.50, 34.40, "E", fontweight="semibold", ha="left", va="bottom", fontsize=6, zorder=20)
+
+
 
 
 def plot_saildrone_buoy_comparison(data: pd.DataFrame, config: dict, filename: str):
