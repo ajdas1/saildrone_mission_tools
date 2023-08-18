@@ -46,7 +46,6 @@ If `download_buoy_data` is `True` in the config file:
 ### IN PROGRESS
 ## Creating NHC 7-day outlook figures with historical storms
 **bash/process_nhc_outlook_areas.sh**
-
 If `download_nhc_atcf_data` and `preprocess_atcf_wind_radii` are `True`:
 - downloads the atcf forecasts and best track data (default from 2002 to 2023).
 - renames the files for easier comprehension and cleans them up: *basin_year-storm.dat*.
@@ -54,3 +53,6 @@ If `download_nhc_atcf_data` and `preprocess_atcf_wind_radii` are `True`:
 - downloads the latest NHC outlook advisories and compiles historical storms that started within the highlighted regions. Makes figures.
 - *creates a PDF to summarize the action*
 
+
+To create the pdf files, there's some additional software that needs to be installed: 
+- *imagemagick* <https://imagemagick.org/script/download.php>
