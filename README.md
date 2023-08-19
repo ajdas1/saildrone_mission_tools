@@ -4,6 +4,7 @@ Helpful tools for Saildrone hurricane mission management.
 To create an anaconda environment where the scripts should run smoothly, and activate it:
 
 ```
+conda update --all
 conda env create -f configs/environment.yml
 conda activate sd_mission_management
 ```
