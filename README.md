@@ -7,7 +7,13 @@ To create an anaconda environment where the scripts should run smoothly, and act
 conda update --all
 conda env create -f configs/environment.yml
 conda activate sd_mission_tools
-conda develop *path_to_util*
+```
+
+The first time you run it, you will also need to add the util directory to the path
+```
+cd util
+pwd (Linux/Mac) or cd (Windows) -- will return a path (e.g., /Users/....../util)
+conda develop */Users/....../util*
 ```
 
 ## Basic directory structure
