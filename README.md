@@ -7,6 +7,7 @@ To create an anaconda environment where the scripts should run smoothly, and act
 conda update --all
 conda env create -f configs/environment.yml
 conda activate sd_mission_tools
+conda develop *path_to_util*
 ```
 
 ## Basic directory structure
