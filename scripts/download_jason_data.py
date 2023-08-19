@@ -1,10 +1,8 @@
 import os
 import sys
-import urllib.request
-import urllib.error
 
 from paths import check_for_dir_create, jason3_archive, read_yaml_config, repo_path
-from read_url import get_files_at_url
+from read_url import get_files_at_url, retrieve_url_file
 
 
 config_file = f"{repo_path}{os.sep}configs{os.sep}config.yml"
@@ -29,7 +27,4 @@ for record in range(config["jason_number_most_recent_cycles_to_download"]):
     for num, file in enumerate(current_records):
         filename = file.split("/")[-1]
         if not os.path.isfile(f"{jason_dir}{os.sep}{filename}"):
-            try:
-                urllib.request.urlretrieve(file, f"{jason_dir}{os.sep}{filename}")
-            except urllib.error.HTTPError:
-                continue
+            retrieve_url_file(file, f"{jason_dir}{os.sep}{filename}")

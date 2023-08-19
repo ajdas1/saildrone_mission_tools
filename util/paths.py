@@ -8,7 +8,7 @@ atcf_archive = "https://ftp.nhc.noaa.gov/atcf/archive/"
 atcf_invest_archive = "https://ftp.nhc.noaa.gov/atcf/aid_public/"
 buoy_archive = "https://www.ndbc.noaa.gov/data/realtime2/"
 jason3_archive = "https://www.ncei.noaa.gov/data/oceans/jason3/gdr/gdr/"
-nhc_outlook_archive = "https://www.nhc.noaa.gov/archive/xgtwo/atl/"
+nhc_outlook_archive = "https://www.nhc.noaa.gov/archive/xgtwo/atl"
 saildrone_archive = "https://data.pmel.noaa.gov/generic/erddap/tabledap/"
 
 url_buoy_info = "https://www.ndbc.noaa.gov/station_page.php?station="

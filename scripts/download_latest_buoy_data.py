@@ -1,9 +1,8 @@
 import os
 import sys
-import urllib.request
-import urllib.error
 
 from paths import check_for_dir_create, read_yaml_config, repo_path, buoy_archive
+from read_url import retrieve_url_file
 
 config_file = f"{repo_path}{os.sep}configs{os.sep}config.yml"
 config = read_yaml_config(config_file)
@@ -21,10 +20,4 @@ check_for_dir_create(buoy_dir)
 for buoy in buoys:
     if len(buoy) > 0:
         print(f"Downloading the latest data for buoy {buoy}.")
-        try:
-            urllib.request.urlretrieve(
-                f"{buoy_archive}{buoy}.txt", f"{buoy_dir}{os.sep}buoy_{buoy}.txt"
-            )
-        except urllib.error.HTTPError:
-            print("Could not download the latest data.")
-            continue
+        retrieve_url_file(f"{buoy_archive}{buoy}.txt", f"{buoy_dir}{os.sep}buoy_{buoy}.txt")

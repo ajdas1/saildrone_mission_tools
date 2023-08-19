@@ -27,6 +27,81 @@ from typing import List
 
 
 
+def plot_invest_winds(data: pd.DataFrame, filename: str):
+
+    aids_to_use = ["CARQ", "OFCL", "AVNI", "CMCI", "CTCI", "DSHP", "EGRI", "EMXI", "FSSE", "GFSI", "HCCA", "HMNI", "HWFI", "ICON", "IVCN", "LGEM", "NVGI"] 
+
+    data = data[data.FcstCenter.isin(aids_to_use)]
+    products = data.FcstCenter.unique()
+    colors = plt.cm.turbo(np.linspace(0, 1, len(aids_to_use)))
+    pcolors = {aids_to_use[idx]: colors[idx] for idx in range(len(aids_to_use))}
+    pcolors["CARQ"] = "k"
+
+
+    fig = plt.figure(figsize = (8, 4))
+    ax_mwsp = fig.add_subplot(111)
+
+    ax_mwsp.grid(True, which="both", linewidth=.5, linestyle="dashed", color=".7")
+
+    ax_mwsp.axhline(34, c="k", lw=1)
+    ax_mwsp.axhline(64, c="k", lw=1)
+    ax_mwsp.axvline(data[(data.FcstCenter=="CARQ") & (data.FcstHour>=0)].Valid.min(), c="k", lw=.5)
+    ax_mwsp.text(data.Valid.max(), 34, "34kt", ha="right", va="bottom", fontweight="semibold")
+    ax_mwsp.text(data.Valid.max(), 64, "64kt", ha="right", va="bottom", fontweight="semibold")
+
+    for product in products:
+        ax_mwsp.plot(data[(data.FcstCenter==product) & (data.FcstHour>=0)].Valid, data[(data.FcstCenter==product) & (data.FcstHour>=0)].MaxSustainedWind, linewidth=1.5, marker="o", markersize=4, c=pcolors[product], label=product)
+
+    ax_mwsp.plot(data[(data.FcstCenter=="CARQ") & (data.FcstHour<=0)].Valid, data[(data.FcstCenter=="CARQ") & (data.FcstHour<=0)].MaxSustainedWind, c="k", lw=2)
+
+    ax_mwsp.legend(loc=2, fontsize=7, ncol=np.ceil(len(products)/8))
+
+    ax_mwsp.xaxis.set_major_formatter(mdates.DateFormatter("%b-%d"))
+    ax_mwsp.xaxis.set_minor_locator(mdates.HourLocator(interval=6))
+    ax_mwsp.xaxis.set_major_locator(mdates.HourLocator(interval=24))
+
+
+    ax_mwsp.set_title(f"INVEST AL{data.StormNumber.iloc[0]}: {data.Date.iloc[0].strftime('%Y-%m-%d %H')} UTC - Maximum Sustained Winds (kt)")
+    ax_mwsp.set_ylim(bottom=0)
+    ax_mwsp.set_xlim(data.Valid.min(), data.Valid.max())
+    plt.savefig(filename, dpi=200, bbox_inches="tight")
+    plt.close("all")
+
+
+
+
+
+
+
+def plot_invest_track(data: pd.DataFrame, filename: str):
+    
+    aids_to_use = ["CARQ", "OFCL", "NVGI", "AVNI", "GFSI", "EMXI",
+                   "EGRI", "CMCI", "HWFI", "CTCI", "HFAI", "HFBI" 
+                   "HMNI", "AEMI", "UEMI", "EMN2", "TVCN", "GFEX", "TVCX"] 
+
+    data = data[data.FcstCenter.isin(aids_to_use)]
+    products = data.FcstCenter.unique()
+    colors = plt.cm.turbo(np.linspace(0, 1, len(aids_to_use)))
+    pcolors = {aids_to_use[idx]: colors[idx] for idx in range(len(aids_to_use))}
+    pcolors["CARQ"] = "k"
+
+
+    fig = plt.figure(figsize = (12, 5))
+    ax = fig.add_subplot(111, projection=proj)
+    set_cartopy_projection_atlantic(ax=ax, ylabel="bottom")
+
+    for product in products:
+        ax.plot(data[(data.FcstCenter==product) & (data.FcstHour>=0)].Longitude, data[(data.FcstCenter==product) & (data.FcstHour>=0)].Latitude, linewidth=1.5, marker="o", markersize=3, c=pcolors[product], label=product)
+
+    ax.plot(data[(data.FcstCenter=="CARQ") & (data.FcstHour<=0)].Longitude, data[(data.FcstCenter=="CARQ") & (data.FcstHour<=0)].Latitude, c="k", lw=2)
+    ax.plot(data[(data.FcstCenter=="CARQ") & (data.FcstHour==0)].Longitude, data[(data.FcstCenter=="CARQ") & (data.FcstHour==0)].Latitude, marker="x", color="r", markersize=7, mew=2)
+
+    ax.legend(loc=1, fontsize=7, ncol=np.ceil(len(products)/25))
+
+    ax.set_title(f"INVEST AL{data.StormNumber.iloc[0]}: {data.Date.iloc[0].strftime('%Y-%m-%d %H')} UTC")
+    plt.savefig(filename, dpi=200, bbox_inches="tight")
+    plt.close("all")
+
 
 
 

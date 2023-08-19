@@ -19,7 +19,7 @@ from cartopy.geodesic import Geodesic
 from conversions import convert_time_to_utc
 from datetime import datetime, timedelta
 from paths import nhc_outlook_archive, repo_path
-from read_url import get_files_at_url
+from read_url import get_files_at_url, retrieve_url_file
 from shapely.ops import polygonize
 from typing import Any, Dict, List
 
@@ -255,12 +255,9 @@ def download_outlook_shapefile(time: str, savedir: str) -> List[str]:
         most_recent_idx = modified_time.index(most_recent_time)
         most_recent_file = files[most_recent_idx]
         filename = f"{savedir}/{most_recent_time.strftime('%Y%m%d%H%M')}.zip"
+        retrieve_url_file(url=most_recent_file+"gtwo_shapefiles.zip", destination=filename)
 
-        try:
-            urllib.request.urlretrieve(most_recent_file+"gtwo_shapefiles.zip", filename)
-            return filename, most_recent_time
-        except urllib.error.HTTPError:
-            pass
+        return filename, most_recent_time
     
     else:
         return None, None

@@ -1,11 +1,9 @@
 import os
 import subprocess
 import sys
-import urllib.request
-import urllib.error
 
 from paths import atcf_archive, check_for_dir_create, read_yaml_config, repo_path
-from read_url import get_files_at_url
+from read_url import get_files_at_url, retrieve_url_file
 
 config_file = f"{repo_path}{os.sep}configs{os.sep}config.yml"
 config = read_yaml_config(config_file)
@@ -38,13 +36,7 @@ for year in range(config["atcf_start_year"], config["atcf_end_year"]):
         filename = record.split("/")[-1]
         if ("aal5" not in filename) and ("aal8" not in filename):
             if not os.path.isfile(f"{adecks_dir}{os.sep}{filename}"):
-                try:
-                    urllib.request.urlretrieve(
-                        record, f"{adecks_dir}{os.sep}{filename}"
-                    )
-
-                except urllib.error.HTTPError:
-                    continue
+                retrieve_url_file(record, f"{adecks_dir}{os.sep}{filename}")
 
             if ".gz" in filename:
                 unzip_command = ["gunzip", f"{adecks_dir}{os.sep}{filename}"]
@@ -54,13 +46,7 @@ for year in range(config["atcf_start_year"], config["atcf_end_year"]):
         filename = record.split("/")[-1]
         if ("bal5" not in filename) and ("bal8" not in filename):
             if not os.path.isfile(f"{bdecks_dir}{os.sep}{filename}"):
-                try:
-                    urllib.request.urlretrieve(
-                        record, f"{bdecks_dir}{os.sep}{filename}"
-                    )
-
-                except urllib.error.HTTPError:
-                    continue
+                retrieve_url_file(record, f"{bdecks_dir}{os.sep}{filename}")
 
             if ".gz" in filename:
                 unzip_command = ["gunzip", f"{bdecks_dir}{os.sep}{filename}"]

@@ -43,6 +43,7 @@ preprocess_atcf_wind_radii: False
 download_nhc_invest_data: True
 invests_of_interest: AL90, AL98, AL99
 download_nhc_invest_data_path: data/hurricane_forecasts/invest
+invest_figure_path: invest
 
 # plot_nhc_outlook_areas
 local_timezone: US/Eastern
@@ -51,9 +52,10 @@ outlook_figure_path: nhc_outlook
 
 
 # create_nhc_outlook_areas_pdf_summary
-summary_figure_path: latest
+summary_outlook_figure_path: latest
+summary_invest_figure_path: latest
 summary_pdf_path: nhc_outlook_summary
 document_author: Ajda Savarin
 summary_figure_colorbar: configs/colorbar.png
-remove_original_data_folder: True
-remove_original_figure_folder: True
+remove_outlook_data_folder: True
+remove_figures: True

@@ -14,12 +14,21 @@ importlib.reload(conversions)
 
 
 
-from atcf_processing import adecks_datadir, bdecks_datadir, get_atcf_files, get_info_from_filename
+from atcf_processing import adecks_datadir, bdecks_datadir, column_names, column_types, fix_atcf_latitude, fix_atcf_longitude, get_atcf_files, get_info_from_filename
 from conversions import convert_wind_radii_to_polygon
 from datetime import datetime
 from netCDF4 import Dataset
 from typing import Any, List
 
+
+
+def read_raw_atcf(filename: str) -> pd.DataFrame:
+    df = pd.read_csv(filename, header=None, names=column_names, dtype=column_types, delimiter=",", index_col=False, skipinitialspace=True, na_values=["Q"])
+    df.Date = pd.to_datetime(df.Date, format="%Y%m%d%H")
+    df.Latitude = df.Latitude.apply(fix_atcf_latitude)
+    df.Longitude = df.Longitude.apply(fix_atcf_longitude)
+
+    return df
 
 
 def read_all_btks(wr: int = 0) -> list[pd.DataFrame]:

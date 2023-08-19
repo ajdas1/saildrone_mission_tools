@@ -1,9 +1,8 @@
 import os
 import sys
-import urllib.request
-import urllib.error
 
 from paths import check_for_dir_create, read_yaml_config, repo_path, saildrone_archive
+from read_url import retrieve_url_file
 
 
 config_file = f"{repo_path}{os.sep}configs{os.sep}config.yml"
@@ -24,10 +23,4 @@ check_for_dir_create(saildrone_dir)
 for sd in update_saildrones:
     print(f"Downloading the latest file for SD-{sd}.")
     filename = f"sd{sd}_hurricane_2023.ncCF"
-    try:
-        urllib.request.urlretrieve(
-            f"{saildrone_archive}{filename}", f"{saildrone_dir}{os.sep}{filename[:-2]}"
-        )
-    except urllib.error.HTTPError:
-        print("Could not download the latest data.")
-        continue
+    retrieve_url_file(url=f"{saildrone_archive}{filename}", destination=f"{saildrone_dir}{os.sep}{filename[:-2]}")
