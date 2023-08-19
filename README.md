@@ -13,7 +13,7 @@ The first time you run it, you will also need to add the util directory to the p
 ```
 cd util
 pwd (Linux/Mac) or cd (Windows) -- will return a path (e.g., /Users/....../util)
-conda develop */Users/....../util*
+conda develop /Users/....../util (insert the returned path instead of example)
 ```
 
 ## Basic directory structure
