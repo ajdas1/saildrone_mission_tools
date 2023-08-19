@@ -39,6 +39,11 @@ atcf_start_year: 2002
 atcf_end_year: 2023
 preprocess_atcf_wind_radii: False
 
+# download_atcf_invest_data
+download_nhc_invest_data: True
+invests_of_interest: AL90, AL98, AL99
+download_nhc_invest_data_path: data/hurricane_forecasts/invest
+
 # plot_nhc_outlook_areas
 local_timezone: US/Eastern
 download_nhc_outlook_data_path: data/hurricane_forecasts/outlooks

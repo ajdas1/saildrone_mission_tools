@@ -15,11 +15,11 @@ importlib.reload(paths)
 import conversions
 importlib.reload(conversions)
 
-from bs4 import BeautifulSoup
 from cartopy.geodesic import Geodesic
 from conversions import convert_time_to_utc
 from datetime import datetime, timedelta
 from paths import nhc_outlook_archive, repo_path
+from read_url import get_files_at_url
 from shapely.ops import polygonize
 from typing import Any, Dict, List
 
@@ -244,9 +244,7 @@ def unzip_shapefile(filename: str, savefile: str = "", overwrite: bool = True, r
 
 
 def download_outlook_shapefile(time: str, savedir: str) -> List[str]:
-    url_data = urllib.request.urlopen(nhc_outlook_archive).read()
-    soup = BeautifulSoup(url_data, "html.parser")    
-    files = [nhc_outlook_archive + node.get('href') for node in soup.find_all("a")]
+    files = get_files_at_url(url=nhc_outlook_archive)
     files = [path for path in files if len(path.split("/")) == 8 and "latest" not in path]
     modified_time = [convert_time_to_utc(time=datetime.strptime(tm.split("/")[-2], "%Y%m%d%H%M"), timezone=pytz.timezone("UTC")) for tm in files]
 
