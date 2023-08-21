@@ -20,6 +20,7 @@ url_glider_unit1091 = (
     "http://dockserver.skio.uga.edu/images/unit_1091/unit_1091_wptlatlonDate.txt"
 )
 
+
 def repository_path() -> str:
     """
     Retrieves the path to the git repository
@@ -62,8 +63,8 @@ def check_for_dir_create(dirname: str, empty: bool = False):
             dir_path = f"{os.sep}".join(dirs[: dir + 1])
             if not os.path.isdir(dir_path):
                 os.mkdir(dir_path)
-    
-    elif empty == True: 
+
+    elif empty == True:
         fls = os.listdir(dirname)
         for fl in fls:
             os.remove(f"{dirname}{os.sep}{fl}")

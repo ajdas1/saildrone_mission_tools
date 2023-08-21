@@ -23,4 +23,7 @@ check_for_dir_create(saildrone_dir)
 for sd in update_saildrones:
     print(f"Downloading the latest file for SD-{sd}.")
     filename = f"sd{sd}_hurricane_2023.ncCF"
-    retrieve_url_file(url=f"{saildrone_archive}{filename}", destination=f"{saildrone_dir}{os.sep}{filename[:-2]}")
+    retrieve_url_file(
+        url=f"{saildrone_archive}{filename}",
+        destination=f"{saildrone_dir}{os.sep}{filename[:-2]}",
+    )

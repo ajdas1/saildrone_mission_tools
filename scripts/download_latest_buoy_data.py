@@ -20,4 +20,6 @@ check_for_dir_create(buoy_dir)
 for buoy in buoys:
     if len(buoy) > 0:
         print(f"Downloading the latest data for buoy {buoy}.")
-        retrieve_url_file(f"{buoy_archive}{buoy}.txt", f"{buoy_dir}{os.sep}buoy_{buoy}.txt")
+        retrieve_url_file(
+            f"{buoy_archive}{buoy}.txt", f"{buoy_dir}{os.sep}buoy_{buoy}.txt"
+        )

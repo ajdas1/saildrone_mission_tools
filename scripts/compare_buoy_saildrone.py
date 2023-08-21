@@ -20,7 +20,11 @@ if not config["compare_buoy_saildrone"]:
 buoy_dir = f"{repo_path}{os.sep}" + f"{config['download_buoy_data_path']}"
 buoy_position = get_ndbc_buoy_position(config=config)
 saildrone_dir = f"{repo_path}{os.sep}" + f"{config['download_saildrone_data_path']}"
-figure_dir = f"{repo_path}{os.sep}" + f"{config['figure_path']}{os.sep}" + f"{config['comparison_figure_path']}"
+figure_dir = (
+    f"{repo_path}{os.sep}"
+    + f"{config['figure_path']}{os.sep}"
+    + f"{config['comparison_figure_path']}"
+)
 check_for_dir_create(figure_dir)
 fl_buoy = f"buoy_{config['comparison_buoy']}.txt"
 fl_saildrone = f"sd{config['comparison_saildrone']}_hurricane_2023.nc"
@@ -31,7 +35,9 @@ if not fl_saildrone in os.listdir(saildrone_dir):
     print(f"Data for saildrone {config['comparison_saildrone']} not found.")
     sys.exit()
 
-print(f"Comparing SD-{config['comparison_saildrone']} and buoy {config['comparison_buoy']} observations.")
+print(
+    f"Comparing SD-{config['comparison_saildrone']} and buoy {config['comparison_buoy']} observations."
+)
 
 # read in and process data
 buoy_data = read_ndbc_buoy_format(filename=f"{buoy_dir}{os.sep}{fl_buoy}")
@@ -86,6 +92,7 @@ data = data[
 
 filename = (
     f"{figure_dir}{os.sep}"
-    + f"Comparison_SD{config['comparison_saildrone']}_B{config['comparison_buoy']}_" + f"{config['comparison_start_time'].strftime('%Y-%m-%d')}_{config['comparison_end_time'].strftime('%Y-%m-%d')}.png"
+    + f"Comparison_SD{config['comparison_saildrone']}_B{config['comparison_buoy']}_"
+    + f"{config['comparison_start_time'].strftime('%Y-%m-%d')}_{config['comparison_end_time'].strftime('%Y-%m-%d')}.png"
 )
 plot_saildrone_buoy_comparison(data=data, config=config, filename=filename)

@@ -66,7 +66,7 @@ if preprocess_wind_radii:
     check_for_dir_create(bdecks_dir_windradii)
     fls = get_atcf_files()
     for fl in fls:
-        df = pd.read_csv(f"{adecks_dir}{os.sep}{fl}")
+        df = pd.read_csv(f"{adecks_dir}{os.sep}{fl}", low_memory=False)
         df.Date = pd.to_datetime(df.Date)
         df = df.drop(
             columns=[

@@ -1,4 +1,3 @@
-
 import numpy as np
 import os
 import pandas as pd
@@ -7,23 +6,70 @@ import xarray as xr
 
 import importlib
 import atcf_processing
+
 importlib.reload(atcf_processing)
 import conversions
+
 importlib.reload(conversions)
 
 
-
-
-from atcf_processing import adecks_datadir, bdecks_datadir, column_names, column_types, fix_atcf_latitude, fix_atcf_longitude, get_atcf_files, get_info_from_filename
+from atcf_processing import (
+    adecks_datadir,
+    bdecks_datadir,
+    column_names,
+    column_types,
+    fix_atcf_latitude,
+    fix_atcf_longitude,
+    get_atcf_files,
+    get_info_from_filename,
+)
 from conversions import convert_wind_radii_to_polygon
 from datetime import datetime
 from netCDF4 import Dataset
 from typing import Any, List
 
 
+def remove_atcf_duplicates(data: dict):
+    data_clean = {}
+    searched = []
+    skip = []
+    for btk_c in data:
+        if btk_c not in skip:
+            slon_c = data[btk_c].Longitude.iloc[0]
+            slat_c = data[btk_c].Latitude.iloc[0]
+            stime_c = data[btk_c].Valid.iloc[0]
+            btk_others = [btk for btk in data if not btk in searched + [btk_c]]
+            duplicates = [btk_c]
+            for btk_o in btk_others:
+                slon_o = data[btk_o].Longitude.iloc[0]
+                slat_o = data[btk_o].Latitude.iloc[0]
+                stime_o = data[btk_o].Valid.iloc[0]
+                if (slon_o == slon_c) and (slat_o == slat_c) and (stime_o == stime_c):
+                    duplicates.append(btk_o)
+
+            if len(duplicates) == 1:
+                data_clean[btk_c] = data[btk_c]
+            elif len(duplicates) == 2:
+                duplicates = sorted(duplicates)
+                data_clean[btk_c] = data[duplicates[0]]
+                skip = duplicates[1]
+
+            searched.append(btk_c)
+
+    return data_clean
+
 
 def read_raw_atcf(filename: str) -> pd.DataFrame:
-    df = pd.read_csv(filename, header=None, names=column_names, dtype=column_types, delimiter=",", index_col=False, skipinitialspace=True, na_values=["Q"])
+    df = pd.read_csv(
+        filename,
+        header=None,
+        names=column_names,
+        dtype=column_types,
+        delimiter=",",
+        index_col=False,
+        skipinitialspace=True,
+        na_values=["Q"],
+    )
     df.Date = pd.to_datetime(df.Date, format="%Y%m%d%H")
     df.Latitude = df.Latitude.apply(fix_atcf_latitude)
     df.Longitude = df.Longitude.apply(fix_atcf_longitude)
@@ -35,7 +81,9 @@ def read_all_btks(wr: int = 0) -> list[pd.DataFrame]:
     fls = get_atcf_files()
     btks = []
     for fl in fls:
-        _, _, btk = read_atcf_modified_wind_radii(filename=fl, wr=wr, fcst=False, btk=True)
+        _, _, btk = read_atcf_modified_wind_radii(
+            filename=fl, wr=wr, fcst=False, btk=True
+        )
         if btk is not None:
             btk["Center"] = btk[["Longitude", "Latitude"]].apply(shp.Point, axis=1)
             btk["WindRadii"] = btk.apply(convert_wind_radii_to_polygon, axis=1)
@@ -44,25 +92,30 @@ def read_all_btks(wr: int = 0) -> list[pd.DataFrame]:
     return btks
 
 
-
-
-def read_atcf_modified_wind_radii(filename: str, wr: int, fcst: bool = True, btk: bool = True) -> List[Any]:
-
+def read_atcf_modified_wind_radii(
+    filename: str, wr: int, fcst: bool = True, btk: bool = True
+) -> List[Any]:
     storm_info = get_info_from_filename(filename=f"{adecks_datadir}{filename}")
 
     if fcst:
-        current_filename = f"{adecks_datadir}wind_radii/{filename[:-4]}_{wr}kt{filename[-4:]}"
+        current_filename = (
+            f"{adecks_datadir}wind_radii/{filename[:-4]}_{wr}kt{filename[-4:]}"
+        )
         if os.path.isfile(current_filename):
             df_fcst = pd.read_csv(current_filename, header=0, delimiter=",")
             df_fcst.Date = pd.to_datetime(df_fcst.Date)
-            df_fcst["Valid"] = df_fcst.Date + pd.to_timedelta(df_fcst.FcstHour, unit="hr")
+            df_fcst["Valid"] = df_fcst.Date + pd.to_timedelta(
+                df_fcst.FcstHour, unit="hr"
+            )
         else:
             df_fcst = None
     else:
         df_fcst = None
 
     if btk:
-        current_filename = f"{bdecks_datadir}wind_radii/{filename[:-4]}_{wr}kt{filename[-4:]}"
+        current_filename = (
+            f"{bdecks_datadir}wind_radii/{filename[:-4]}_{wr}kt{filename[-4:]}"
+        )
         if os.path.isfile(current_filename):
             df_btk = pd.read_csv(current_filename, header=0, delimiter=",")
             df_btk.Date = pd.to_datetime(df_btk.Date)
@@ -75,11 +128,10 @@ def read_atcf_modified_wind_radii(filename: str, wr: int, fcst: bool = True, btk
     return storm_info, df_fcst, df_btk
 
 
-
-
-
 def read_saildrone_latest_position():
-    datadir = "/Users/asavarin/Desktop/saildrone/scripts/rapid_deployment/saildrone_data"
+    datadir = (
+        "/Users/asavarin/Desktop/saildrone/scripts/rapid_deployment/saildrone_data"
+    )
     fls = sorted(os.listdir(datadir))
 
     sd_data = {}
@@ -97,14 +149,12 @@ def read_saildrone_latest_position():
         dir = (90 + (360 - (np.rad2deg(np.arctan2(dlat, dlon)) % 360))) % 360
 
         sd_data[sd_number] = {
-            "lon": lon[-1], 
+            "lon": lon[-1],
             "lat": lat[-1],
             "dir": dir,
         }
-    
+
     return sd_data
-
-
 
 
 def read_ndbc_buoy_format(filename: str) -> pd.DataFrame:
@@ -151,8 +201,6 @@ def read_ndbc_buoy_format(filename: str) -> pd.DataFrame:
     df["tide_level"] = tide
 
     return df
-
-
 
 
 def read_saildrone_format(filename: str) -> pd.DataFrame:
@@ -215,4 +263,3 @@ def read_saildrone_format(filename: str) -> pd.DataFrame:
         pass
 
     return data
-

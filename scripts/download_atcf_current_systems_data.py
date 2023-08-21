@@ -7,34 +7,36 @@ import sys
 
 
 import paths
+
 importlib.reload(paths)
 import read_url
+
 importlib.reload(read_url)
 
-from paths import atcf_btk_archive, atcf_storm_archive, check_for_dir_create, read_yaml_config, repo_path
+from paths import (
+    atcf_btk_archive,
+    atcf_storm_archive,
+    check_for_dir_create,
+    read_yaml_config,
+    repo_path,
+)
 from read_url import get_files_at_url, retrieve_url_file
-
 
 
 config_file = f"{repo_path}{os.sep}configs{os.sep}config.yml"
 config = read_yaml_config(config_file)
 
-if not (config["download_nhc_invest_data"] or config["download_nhc_storm_data"] or config["download_nhc_btk_data"]):
+if not (
+    config["download_nhc_invest_data"]
+    or config["download_nhc_storm_data"]
+    or config["download_nhc_btk_data"]
+):
     sys.exit()
 
 
-invest_dir = (
-    f"{repo_path}{os.sep}"
-    + f"{config['download_nhc_invest_data_path']}"
-)
-storm_dir = (
-    f"{repo_path}{os.sep}"
-    + f"{config['download_nhc_storm_data_path']}"
-)
-btk_dir = (
-    f"{repo_path}{os.sep}"
-    + f"{config['download_nhc_btk_data_path']}"
-)
+invest_dir = f"{repo_path}{os.sep}" + f"{config['download_nhc_invest_data_path']}"
+storm_dir = f"{repo_path}{os.sep}" + f"{config['download_nhc_storm_data_path']}"
+btk_dir = f"{repo_path}{os.sep}" + f"{config['download_nhc_btk_data_path']}"
 check_for_dir_create(invest_dir)
 check_for_dir_create(storm_dir)
 check_for_dir_create(btk_dir)
