@@ -63,7 +63,18 @@ compile_latex_file(filename=latex_file, save_dir=pdf_dir, remove_tex=True)
 
 if config["clean_up_data_and_figures"]:
     clean_up_outlook_data(time=latest_outlook_time, data_dir=data_dir)
-    os.remove(f"{repo_path}{os.sep}data/best_track")
-    os.remove(f"{repo_path}{os.sep}data/invests")
-    os.remove(f"{repo_path}{os.sep}data/storm")
-    os.remove(fig_dir_outlook)
+    path = f"{repo_path}{os.sep}{config['download_nhc_invest_data_path']}"
+    for fl in os.listdir(path):
+        os.remove(f"{path}{os.sep}{fl}")
+    os.rmdir(path)
+    path = f"{repo_path}{os.sep}{config['download_nhc_storm_data_path']}"
+    for fl in os.listdir(path):
+        os.remove(f"{path}{os.sep}{fl}")
+    os.rmdir(path)
+    path = f"{repo_path}{os.sep}{config['download_nhc_btk_data_path']}"
+    for fl in os.listdir(path):
+        os.remove(f"{path}{os.sep}{fl}")
+    os.rmdir(path)
+    for fl in os.listdir(fig_dir_outlook):
+        os.remove(f"{fig_dir_outlook}{os.sep}{fl}")
+    os.rmdir(fig_dir_outlook)
