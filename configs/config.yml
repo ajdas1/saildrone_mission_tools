@@ -42,10 +42,12 @@ preprocess_atcf_wind_radii: False
 # download_atcf_current_systems_data
 download_nhc_invest_data: True
 download_nhc_storm_data: True
-invests_of_interest: AL91, AL92
-storms_of_interest: FRANKLIN, GERT, EMILY, NINE
+download_nhc_btk_data: True
 download_nhc_invest_data_path: data/hurricane_forecasts/invest
 download_nhc_storm_data_path: data/hurricane_forecasts/storm
+download_nhc_btk_data_path: data/hurricane_forecasts/best_track
+invests_of_interest: AL91, AL92
+storms_of_interest: FRANKLIN, GERT, EMILY, NINE
 invest_figure_path: invest
 
 # plot_nhc_outlook_areas
