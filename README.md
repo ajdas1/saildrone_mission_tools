@@ -51,7 +51,8 @@ If `download_nhc_atcf_data` and `preprocess_atcf_wind_radii` are `True`:
 - renames the files for easier comprehension and cleans them up: *basin_year-storm.dat*.
 - separates data into different wind speed radii (34-, 50, and 64-kt) products.
 - downloads the latest NHC outlook advisories and compiles historical storms that started within the highlighted regions. Makes figures.
-- create a PDF document with all the figures
+- downloads the current invest and storm best track and forecast data. Makes figures.
+- create a PDF document with all the figures.
 
 To create the pdf files, there's some additional software that needs to be installed: 
 - *ImageMagick* <https://imagemagick.org/script/download.php>

@@ -155,7 +155,6 @@ dependencies:
   - pip:
     - appnope==0.1.2
     - beautifulsoup4==4.12.2
-    - black==0.0
     - bottleneck==1.3.5
     - brotli==1.0.9
     - cartopy==0.22.0

@@ -4,10 +4,12 @@ import yaml
 from typing import Dict
 
 repo_name = "saildrone_mission_tools"
-atcf_archive = "https://ftp.nhc.noaa.gov/atcf/archive/"
+atcf_archive = "https://ftp.nhc.noaa.gov/atcf/archive"
+atcf_storm_archive = "https://ftp.nhc.noaa.gov/atcf/aid_public"
+atcf_btk_archive = "https://ftp.nhc.noaa.gov/atcf/btk"
 buoy_archive = "https://www.ndbc.noaa.gov/data/realtime2/"
-jason3_archive = "https://www.ncei.noaa.gov/data/oceans/jason3/gdr/gdr/"
-nhc_outlook_archive = "https://www.nhc.noaa.gov/archive/xgtwo/atl/"
+jason3_archive = "https://www.ncei.noaa.gov/data/oceans/jason3/gdr/gdr"
+nhc_outlook_archive = "https://www.nhc.noaa.gov/archive/xgtwo/atl"
 saildrone_archive = "https://data.pmel.noaa.gov/generic/erddap/tabledap/"
 
 url_buoy_info = "https://www.ndbc.noaa.gov/station_page.php?station="
@@ -17,6 +19,7 @@ url_glider_franklin = (
 url_glider_unit1091 = (
     "http://dockserver.skio.uga.edu/images/unit_1091/unit_1091_wptlatlonDate.txt"
 )
+
 
 def repository_path() -> str:
     """
@@ -60,8 +63,8 @@ def check_for_dir_create(dirname: str, empty: bool = False):
             dir_path = f"{os.sep}".join(dirs[: dir + 1])
             if not os.path.isdir(dir_path):
                 os.mkdir(dir_path)
-    
-    elif empty == True: 
+
+    elif empty == True:
         fls = os.listdir(dirname)
         for fl in fls:
             os.remove(f"{dirname}{os.sep}{fl}")
