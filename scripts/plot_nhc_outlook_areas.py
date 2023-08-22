@@ -3,13 +3,7 @@ import pandas as pd
 import pytz
 import sys
 import warnings
-import importlib
 import plotting
-
-importlib.reload(plotting)
-import read_file
-
-importlib.reload(read_file)
 from atcf_processing import (
     count_overlapping_features,
     download_outlook_shapefile,
@@ -68,7 +62,7 @@ print(
     f"The latest update to outlook areas was made on: {outlook_time.strftime('%Y-%m-%d %H:%M')} UTC."
 )
 outlook_fls = unzip_shapefile(filename=outlook_fl, overwrite=True, remove=True)
-sd_position = read_saildrone_latest_position()
+sd_position = read_saildrone_latest_position(config=config)
 shapes = read_shapefile_areas(directory=outlook_fls)
 shapes = (
     shapes[shapes.BASIN == "Atlantic"].sort_values(by="AREA").reset_index(drop=True)

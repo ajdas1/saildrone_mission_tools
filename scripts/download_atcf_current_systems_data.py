@@ -1,18 +1,7 @@
-import importlib
-
-
 import os
 import re
 import sys
-
-
 import paths
-
-importlib.reload(paths)
-import read_url
-
-importlib.reload(read_url)
-
 from paths import (
     atcf_btk_archive,
     atcf_storm_archive,
