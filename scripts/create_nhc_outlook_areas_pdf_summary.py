@@ -37,7 +37,7 @@ check_for_dir_create(fig_dir_outlook)
 check_for_dir_create(fig_dir_summary, empty=True)
 pdf_dir = f"{repo_path}{os.sep}{config['summary_pdf_path']}"
 check_for_dir_create(pdf_dir)
-sd_position = read_saildrone_latest_position()
+sd_position = read_saildrone_latest_position(config=config)
 
 
 fig_dirs = [fdir for fdir in os.listdir(fig_dir_outlook) if ("latest" not in fdir)]

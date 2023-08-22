@@ -27,6 +27,7 @@ from conversions import convert_wind_radii_to_polygon
 from datetime import datetime
 from netCDF4 import Dataset
 from typing import Any, List
+from paths import repo_path
 
 
 def remove_atcf_duplicates(data: dict):
@@ -128,9 +129,9 @@ def read_atcf_modified_wind_radii(
     return storm_info, df_fcst, df_btk
 
 
-def read_saildrone_latest_position():
+def read_saildrone_latest_position(config: dict):
     datadir = (
-        "/Users/asavarin/Desktop/saildrone/scripts/rapid_deployment/saildrone_data"
+        f"{repo_path}{os.sep}{config['download_saildrone_data_path']}"
     )
     fls = sorted(os.listdir(datadir))
 
