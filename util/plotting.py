@@ -5,15 +5,6 @@ import numpy as np
 import os
 import pandas as pd
 
-import importlib
-import conversions
-
-importlib.reload(conversions)
-import projection
-
-importlib.reload(projection)
-
-
 from conversions import get_centroid_coordinates
 from datetime import datetime, timedelta
 from matplotlib import rc
@@ -103,32 +94,33 @@ def plot_system_winds(btk_data: pd.DataFrame, fcst_data: pd.DataFrame, filename:
         btk_data.Valid.iloc[-1], btk_data.MaxSustainedWind.iloc[-1], "ok", markersize=4
     )
 
-    for product in products:
-        fcst_curr = fcst_data[
-            (fcst_data.FcstCenter == product) & (fcst_data.FcstHour >= 0)
-        ]
-        if product in ["OFCL", "OFCI"]:
-            ax_mwsp.plot(
-                fcst_curr.Valid,
-                fcst_curr.MaxSustainedWind,
-                linewidth=1.5,
-                marker="o",
-                markersize=3,
-                c=pcolors[product],
-                label=product,
-                zorder=5,
-            )
-        else:
-            ax_mwsp.plot(
-                fcst_curr.Valid,
-                fcst_curr.MaxSustainedWind,
-                linewidth=1.5,
-                marker="o",
-                markersize=3,
-                c=pcolors[product],
-                label=product,
-            )
-    ax_mwsp.legend(loc=2, fontsize=7, ncol=np.ceil(len(products) / 8))
+    if len(products) > 0:
+        for product in products:
+            fcst_curr = fcst_data[
+                (fcst_data.FcstCenter == product) & (fcst_data.FcstHour >= 0)
+            ]
+            if product in ["OFCL", "OFCI"]:
+                ax_mwsp.plot(
+                    fcst_curr.Valid,
+                    fcst_curr.MaxSustainedWind,
+                    linewidth=1.5,
+                    marker="o",
+                    markersize=3,
+                    c=pcolors[product],
+                    label=product,
+                    zorder=5,
+                )
+            else:
+                ax_mwsp.plot(
+                    fcst_curr.Valid,
+                    fcst_curr.MaxSustainedWind,
+                    linewidth=1.5,
+                    marker="o",
+                    markersize=3,
+                    c=pcolors[product],
+                    label=product,
+                )
+        ax_mwsp.legend(loc=2, fontsize=7, ncol=np.ceil(len(products) / 8))
 
     ax_mwsp.xaxis.set_major_formatter(mdates.DateFormatter("%b-%d"))
     ax_mwsp.xaxis.set_minor_locator(mdates.HourLocator(byhour=range(0, 24, 6)))
@@ -167,31 +159,32 @@ def plot_system_track(
     ax = fig.add_subplot(111, projection=proj)
     set_cartopy_projection_atlantic(ax=ax, ylabel="bottom")
 
-    for product in products:
-        fcst_curr = fcst_data[
-            (fcst_data.FcstCenter == product) & (fcst_data.FcstHour >= 0)
-        ]
-        if product in ["OFCL", "OFCI"]:
-            ax.plot(
-                fcst_curr.Longitude,
-                fcst_curr.Latitude,
-                linewidth=1.5,
-                marker="o",
-                markersize=3,
-                c=pcolors[product],
-                label=product,
-                zorder=5,
-            )
-        else:
-            ax.plot(
-                fcst_curr.Longitude,
-                fcst_curr.Latitude,
-                linewidth=1.5,
-                marker="o",
-                markersize=3,
-                c=pcolors[product],
-                label=product,
-            )
+    if len(products) > 0:
+        for product in products:
+            fcst_curr = fcst_data[
+                (fcst_data.FcstCenter == product) & (fcst_data.FcstHour >= 0)
+            ]
+            if product in ["OFCL", "OFCI"]:
+                ax.plot(
+                    fcst_curr.Longitude,
+                    fcst_curr.Latitude,
+                    linewidth=1.5,
+                    marker="o",
+                    markersize=3,
+                    c=pcolors[product],
+                    label=product,
+                    zorder=5,
+                )
+            else:
+                ax.plot(
+                    fcst_curr.Longitude,
+                    fcst_curr.Latitude,
+                    linewidth=1.5,
+                    marker="o",
+                    markersize=3,
+                    c=pcolors[product],
+                    label=product,
+                )
 
     # plot btk
     ax.plot(
@@ -230,8 +223,8 @@ def plot_system_track(
                 zorder=10,
             )
         ax.plot(130, 0, "om", markersize=2, label="SD")
-
-    ax.legend(loc=1, fontsize=7, ncol=np.ceil(len(products) / 25))
+    if len(products) > 0:
+        ax.legend(loc=1, fontsize=7, ncol=np.ceil(len(products) / 25))
 
     ax.set_title(f"{name}: {fcst_data.Valid.iloc[0].strftime('%Y-%m-%d %H')} UTC")
     plt.savefig(filename, dpi=200, bbox_inches="tight")
@@ -1047,8 +1040,8 @@ def plot_saildrone_buoy_comparison(data: pd.DataFrame, config: dict, filename: s
     )
 
     ax_dist.xaxis.set_major_formatter(mdates.DateFormatter("%b-%d"))
-    ax_dist.xaxis.set_minor_locator(mdates.DayLocator(interval=1))
-    ax_dist.xaxis.set_major_locator(mdates.DayLocator(interval=2))
+    ax_dist.xaxis.set_minor_locator(mdates.HourLocator(byhour=range(0, 24, 6)))
+    ax_dist.xaxis.set_major_locator(mdates.HourLocator(byhour=0))
     ax_dist.set_xlim(config["comparison_start_time"], config["comparison_end_time"])
     ax_dist.set_ylim(bottom=0)
     ax_wdir.set_ylim(0, 360)

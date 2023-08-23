@@ -4,18 +4,7 @@ import os
 import pandas as pd
 import pytz
 import shapely.geometry as shp
-import urllib.error
-import urllib.request
 import zipfile
-
-
-import importlib
-import paths
-
-importlib.reload(paths)
-import conversions
-
-importlib.reload(conversions)
 
 from cartopy.geodesic import Geodesic
 from conversions import convert_time_to_utc

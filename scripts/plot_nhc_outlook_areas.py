@@ -135,6 +135,7 @@ for idx, system in enumerate(btk_data):
         filename=filename,
         sd_data=sd_position,
     )
+    print(idx, system)
     filename = f"{fig_dir}{os.sep}storm{idx+1:02d}_intensity.png"
     plot_system_winds(btk_data=current_btk, fcst_data=current_fcst, filename=filename)
 
