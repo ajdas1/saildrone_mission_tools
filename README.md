@@ -66,7 +66,7 @@ To create the pdf files, there's some additional software that needs to be insta
 - *pdflatex* <https://www.latex-project.org/get/>
 
 
-### IN PROGRESS
-For pdf creation -- see if you can add in forecast tracks for Invests, etc.
+### IDEAS?
+- add real-time comparison with gliders??
 
 
