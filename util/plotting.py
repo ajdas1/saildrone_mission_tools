@@ -122,6 +122,7 @@ def plot_system_winds(btk_data: pd.DataFrame, fcst_data: pd.DataFrame, filename:
                 )
         ax_mwsp.legend(loc=2, fontsize=7, ncol=np.ceil(len(products) / 8))
 
+    ax_mwsp.xaxis.set_tick_params(rotation=45)
     ax_mwsp.xaxis.set_major_formatter(mdates.DateFormatter("%b-%d"))
     ax_mwsp.xaxis.set_minor_locator(mdates.HourLocator(byhour=range(0, 24, 6)))
     ax_mwsp.xaxis.set_major_locator(mdates.HourLocator(byhour=0))

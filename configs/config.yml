@@ -6,13 +6,13 @@ local_timezone: US/Eastern
 # download_latest_buoy_data
 download_buoy_data: False
 download_buoy_data_path: data/buoy
-buoys: 41002, 41049, 41052, 42099
+buoys: 41002, 41043, 41049, 41052, 42099
 
 # download_latest_saildrone_data
-download_saildrone_data: False
+download_saildrone_data: True
 download_saildrone_data_path: data/saildrone
 all_saildrones: 1031, 1036, 1040, 1041, 1042, 1045, 1057, 1064, 1065, 1068, 1069, 1083
-update_saildrones: 1031, 1036, 1040, 1045, 1057, 1064, 1065, 1068, 1069, 1083
+update_saildrones: 1031, 1036, 1057, 1064, 1065, 1068, 1069, 1083
 
 # download_jason_data
 download_jason3_data: False
@@ -25,13 +25,12 @@ jason_predicted_point_lon: -63.5
 jason_predicted_point_lat: 27.5
 jason_number_of_future_overpasses: 10
 
-
 # compare_buoy_saildrone
-compare_buoy_saildrone: True
-comparison_buoy: 41052
+compare_buoy_saildrone: False
+comparison_buoy: 41043
 comparison_saildrone: 1064
-comparison_start_time: 2023-08-07 22:00:00
-comparison_end_time: 2023-08-09 02:00:00
+comparison_start_time: 2023-08-21 12:00:00
+comparison_end_time: 2023-08-22 00:00:00
 comparison_figure_path: buoy_comparison
 
 # download_atcf_hurricane_data
@@ -59,3 +58,6 @@ summary_pdf_path: nhc_outlook_summary
 document_author: Ajda Savarin
 summary_figure_colorbar: configs/colorbar.png
 clean_up_data_and_figures: True
+
+# plot_aircraft_recon
+download_aircraft_recon: True

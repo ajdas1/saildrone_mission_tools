@@ -227,7 +227,7 @@ def unzip_shapefile(
 
 
 def download_outlook_shapefile(time: str, savedir: str) -> List[str]:
-    files = get_files_at_url(url=nhc_outlook_archive)
+    files, _ = get_files_at_url(url=nhc_outlook_archive)
     files = [
         path for path in files if len(path.split("/")) == 8 and "latest" not in path
     ]
