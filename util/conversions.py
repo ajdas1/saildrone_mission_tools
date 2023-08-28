@@ -10,6 +10,39 @@ from typing import List
 
 
 
+
+
+def get_aircraft_recon_position(value: str):
+
+
+
+    val = int(value[:-1])
+    val_degrees = val // 100
+    val_minutes = val % 100
+    val = float(val_degrees) + float(val_minutes) / 60
+
+    if ("N" in value) or ("E" in value):
+        factor = 1
+    elif ("S" in value) or ("W" in value):
+        factor = -1
+
+    return val * factor
+
+
+
+def get_aircraft_recon_pressure(value: str):
+    try:
+        val = int(value) / 10.
+        if val < 100.:
+            val += 1000.
+    except ValueError:
+        val = np.nan
+
+
+    return val
+
+
+
 def get_mission_names_form_tidbits_link(url: str):
 
     params = url.split("/")[-1].split("_")[-1].split(".txt")[0].split("-")

@@ -14,11 +14,56 @@ from atcf_processing import (
     get_atcf_files,
     get_info_from_filename,
 )
-from conversions import convert_wind_radii_to_polygon
-from datetime import datetime
+from conversions import convert_wind_radii_to_polygon, get_aircraft_recon_position, get_aircraft_recon_pressure
+from datetime import datetime, timedelta
 from netCDF4 import Dataset
 from typing import Any, List
 from paths import repo_path
+
+
+
+def read_aircraft_recon_hdob_file(filename: str, current_time: datetime):
+
+    with open(filename) as file:
+        data = file.readlines()
+    data = data[5:]
+    data = [line.rstrip().split(" ") for line in data]
+    if data[0][0] >= current_time.strftime("%H%M%S"):
+        date = current_time - timedelta(days=1)
+    else:
+        date = current_time
+
+    time = [date.replace(hour=int(line[0][:2]), minute=int(line[0][2:4]), second=int(line[0][4:6]), microsecond=0) for line in data]
+    lat = [get_aircraft_recon_position(value=line[1]) for line in data]
+    lon = [get_aircraft_recon_position(value=line[2]) for line in data]
+    pres = [get_aircraft_recon_pressure(value=line[3]) for line in data]
+    geopotential = [int(line[4]) if line[4] != "/////" else np.nan for line in data]
+    psfc_extrap = [get_aircraft_recon_pressure(value=line[5]) if pres[idx] >= 550. else np.nan for idx, line in enumerate(data)]
+    temp = [int(line[6])/10. if line[6] != "////" else np.nan for line in data]
+    dewp = [int(line[7])/10. if line[7] != "////" else np.nan for line in data]
+    wdir = [int(line[8])//1000 if line[8] != "//////" else np.nan for line in data]
+    wspd = [int(line[8])%1000 if line[8] != "//////" else np.nan for line in data]
+    peak_wind = [int(line[9]) if line[9] != "///" else np.nan for line in data]
+    peak_surf_wind = [int(line[10]) if line[10] != "///" else np.nan for line in data]
+    rain_rate = [int(line[11]) if line[11] != "///" else np.nan for line in data]
+
+    data = pd.DataFrame([], columns=["time", "lat", "lon", "pressure", "temperature", "dewpoint", "wind_direction", "wind_speed", "peak_wind", "peak_surface_wind", "rain_rate"])
+    data.time = time
+    data.lat = lat
+    data.lon = lon
+    data.pressure = pres
+    data.temperature = temp
+    data.dewpoint = dewp
+    data.wind_direction = wdir
+    data.wind_speed = wspd
+    data.peak_wind = peak_wind
+    data.peak_surface_wind = peak_surf_wind
+    data.rain_rate = rain_rate
+
+    return data
+
+
+
 
 
 def remove_atcf_duplicates(data: dict):

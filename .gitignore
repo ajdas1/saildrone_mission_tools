@@ -3,6 +3,7 @@
 
 
 # data files
+**.csv
 **.dat
 **.dat.gz
 **.nc

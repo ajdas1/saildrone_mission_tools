@@ -62,3 +62,4 @@ clean_up_data_and_figures: True
 # plot_aircraft_recon
 download_aircraft_recon: True
 download_recon_flight_data_path: data/recon/aircraft
+figure_path: figures/aircraft_recon
