@@ -28,7 +28,7 @@ check_for_dir_create(bdecks_dir)
 
 for year in range(config["atcf_start_year"], config["atcf_end_year"]):
     print(f"Downloading ATCF data for year {year}")
-    all_records = get_files_at_url(url=f"{atcf_archive}{year}{os.sep}")
+    all_records, _ = get_files_at_url(url=f"{atcf_archive}{year}{os.sep}")
     a_records = [rec for rec in all_records if "aal" in rec]
     b_records = [rec for rec in all_records if "bal" in rec]
 

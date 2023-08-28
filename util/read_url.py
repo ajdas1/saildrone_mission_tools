@@ -6,13 +6,14 @@ import urllib.request
 
 
 from bs4 import BeautifulSoup
-
+from datetime import datetime
 
 def get_files_at_url(url: str, parse_for: str = "a"):
     page = requests.get(url).text
     soup = BeautifulSoup(page, "html.parser")
     all_records = [f"{url}/{node.get('href')}" for node in soup.find_all(parse_for)]
     modified_times = re.findall(r'\d{2}\-\w{3}\-\d{4} \d{2}\:\d{2}', page)
+    modified_times = [datetime.strptime(tm, "%d-%b-%Y %H:%M") for tm in modified_times]
     
     return all_records, modified_times
 

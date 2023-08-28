@@ -9,6 +9,15 @@ from datetime import datetime
 from typing import List
 
 
+
+def get_mission_names_form_tidbits_link(url: str):
+
+    params = url.split("/")[-1].split("_")[-1].split(".txt")[0].split("-")
+    return {"aircraft": params[0], "time": params[1], "storm": params[2]}
+
+
+
+
 def convert_time_to_utc(
     time: datetime, timezone=pytz.timezone("US/Eastern")
 ) -> datetime:
