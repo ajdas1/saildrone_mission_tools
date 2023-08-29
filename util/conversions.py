@@ -2,11 +2,9 @@ import numpy as np
 import pandas as pd
 import pytz
 import shapely.geometry as shp
-import xarray as xr
 
 from cartopy.geodesic import Geodesic
 from datetime import datetime
-from typing import List
 
 
 

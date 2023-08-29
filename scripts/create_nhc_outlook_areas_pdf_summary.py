@@ -1,5 +1,5 @@
 import os
-import paths
+
 from datetime import datetime
 from outlook_pdf_functions import (
     clean_up_outlook_data,

@@ -2,7 +2,6 @@ import os
 import sys
 import xarray as xr
 
-from netCDF4 import Dataset
 from paths import check_for_dir_create, read_yaml_config, repo_path
 
 

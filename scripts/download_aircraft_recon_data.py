@@ -2,15 +2,8 @@ import os
 import pytz
 import sys
 
-from conversions import convert_time_to_utc, get_mission_names_form_tidbits_link
+from conversions import convert_time_to_utc
 from datetime import datetime, timedelta
-
-import importlib
-import paths
-importlib.reload(paths)
-import read_url
-importlib.reload(read_url)
-
 from paths import (
     recon_mission_archive_high_density_obs,
     recon_mission_archive_dropsonde,

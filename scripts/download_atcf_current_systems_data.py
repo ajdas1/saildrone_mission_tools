@@ -1,7 +1,7 @@
 import os
 import re
 import sys
-import paths
+
 from paths import (
     atcf_btk_archive,
     atcf_storm_archive,

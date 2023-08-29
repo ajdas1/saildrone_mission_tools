@@ -21,10 +21,6 @@ from typing import Any, List
 from paths import repo_path
 
 
-
-
-from typing import List
-
 def decode_drop_position(value: str):
 
         lat = int(value[:4])/100.

@@ -3,7 +3,7 @@ import pytz
 import re
 import subprocess
 
-from datetime import datetime, timedelta
+from datetime import datetime
 from paths import repo_path
 
 from conversions import convert_time_to_utc

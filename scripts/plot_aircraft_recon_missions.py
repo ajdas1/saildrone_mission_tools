@@ -1,17 +1,17 @@
-import numpy as np
 import os
 import pandas as pd
 import pytz
 import sys
 
 from conversions import convert_time_to_utc
-from datetime import datetime, timedelta
+from datetime import datetime
 from paths import (
     check_for_dir_create,
     read_yaml_config,
     repo_path,
 )
-from read_file import read_aircraft_recon_hdob_file, read_saildrone_format
+from plotting import plot_aircraft_recon_mission_with_saildrones
+from read_file import read_saildrone_format
 
 config_file = f"{repo_path}{os.sep}configs{os.sep}config.yml"
 config = read_yaml_config(config_file)
@@ -19,11 +19,6 @@ config = read_yaml_config(config_file)
 if not config["download_aircraft_recon"]:
     sys.exit()
 
-from conversions import get_mission_names_form_tidbits_link
-import importlib
-import plotting
-importlib.reload(plotting)
-from plotting import plot_aircraft_recon_mission_with_saildrones
 
 current_time = convert_time_to_utc(datetime.now(), timezone=pytz.timezone(config["local_timezone"])).replace(tzinfo=None)
 

@@ -5,7 +5,6 @@ import sys
 import xarray as xr
 
 from datetime import datetime, timedelta
-from netCDF4 import Dataset
 from paths import check_for_dir_create, read_yaml_config, repo_path
 from projection import great_circle_distance
 

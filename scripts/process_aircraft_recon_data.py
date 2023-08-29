@@ -1,8 +1,8 @@
 import os
-import numpy as np
+import pandas as pd
 import pytz
 import sys
-import pandas as pd
+
 from conversions import convert_time_to_utc
 from datetime import datetime
 from paths import (
@@ -10,10 +10,6 @@ from paths import (
     read_yaml_config,
     repo_path,
 )
-
-import importlib
-import read_file
-importlib.reload(read_file)
 from read_file import combine_aircraft_recon_drop, combine_aircraft_recon_hdob, interpret_dropsonde_text_file
 
 config_file = f"{repo_path}{os.sep}configs{os.sep}config.yml"
