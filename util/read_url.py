@@ -1,10 +1,10 @@
-
 import requests
 import urllib.error
 import urllib.request
 
 
 from bs4 import BeautifulSoup
+
 
 def get_files_at_url(url: str, parse_for: str = "a"):
     page = requests.get(url).text

@@ -24,13 +24,21 @@ if not config["download_aircraft_recon"]:
 recon_dir = f"{repo_path}{os.sep}" + f"{config['download_recon_flight_data_path']}"
 check_for_dir_create(recon_dir, empty=True)
 
-current_time = convert_time_to_utc(datetime.now(), timezone=pytz.timezone(config["local_timezone"])).replace(tzinfo=None)
-tolerance_time = (current_time - timedelta(hours=config["aircraft_recon_hours_back"]))
+current_time = convert_time_to_utc(
+    datetime.now(), timezone=pytz.timezone(config["local_timezone"])
+).replace(tzinfo=None)
+tolerance_time = current_time - timedelta(hours=config["aircraft_recon_hours_back"])
 
-all_records = get_files_at_url(url=recon_mission_archive_high_density_obs, parse_for="a")
+all_records = get_files_at_url(
+    url=recon_mission_archive_high_density_obs, parse_for="a"
+)
 all_records = [rec for rec in all_records if ".txt" in rec]
-record_time = [datetime.strptime(rec.split(".")[-2], "%Y%m%d%H%M") for rec in all_records]
-valid_records = [rec for idx, rec in enumerate(all_records) if record_time[idx] >= tolerance_time]
+record_time = [
+    datetime.strptime(rec.split(".")[-2], "%Y%m%d%H%M") for rec in all_records
+]
+valid_records = [
+    rec for idx, rec in enumerate(all_records) if record_time[idx] >= tolerance_time
+]
 
 
 for file in valid_records:
@@ -44,8 +52,12 @@ check_for_dir_create(recon_dir, empty=True)
 
 all_records = get_files_at_url(url=recon_mission_archive_dropsonde, parse_for="a")
 all_records = [rec for rec in all_records if ".txt" in rec]
-record_time = [datetime.strptime(rec.split(".")[-2], "%Y%m%d%H%M") for rec in all_records]
-valid_records = [rec for idx, rec in enumerate(all_records) if record_time[idx] >= tolerance_time]
+record_time = [
+    datetime.strptime(rec.split(".")[-2], "%Y%m%d%H%M") for rec in all_records
+]
+valid_records = [
+    rec for idx, rec in enumerate(all_records) if record_time[idx] >= tolerance_time
+]
 
 
 for file in valid_records:

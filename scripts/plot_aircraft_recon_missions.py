@@ -20,10 +20,16 @@ if not config["download_aircraft_recon"]:
     sys.exit()
 
 
-current_time = convert_time_to_utc(datetime.now(), timezone=pytz.timezone(config["local_timezone"])).replace(tzinfo=None)
+current_time = convert_time_to_utc(
+    datetime.now(), timezone=pytz.timezone(config["local_timezone"])
+).replace(tzinfo=None)
 
-recon_aircraft_dir = f"{repo_path}{os.sep}" + f"{config['download_recon_flight_data_path']}"
-recon_drop_dir = f"{repo_path}{os.sep}" + f"{config['download_recon_dropsonde_data_path']}"
+recon_aircraft_dir = (
+    f"{repo_path}{os.sep}" + f"{config['download_recon_flight_data_path']}"
+)
+recon_drop_dir = (
+    f"{repo_path}{os.sep}" + f"{config['download_recon_dropsonde_data_path']}"
+)
 saildrone_dir = f"{repo_path}{os.sep}" + f"{config['download_saildrone_data_path']}"
 fig_dir = f"{repo_path}{os.sep}" + f"{config['aircraft_recon_figure_path']}"
 check_for_dir_create(recon_aircraft_dir)
@@ -50,7 +56,9 @@ for fl in recon_fls:
     else:
         drop_data = None
 
-    hour_times = flight_data[(flight_data.time.dt.minute == 0) & (flight_data.time.dt.second == 0)].time
+    hour_times = flight_data[
+        (flight_data.time.dt.minute == 0) & (flight_data.time.dt.second == 0)
+    ].time
     if len(hour_times) > 0:
         first_hour_time = hour_times.iloc[0]
 
@@ -58,19 +66,27 @@ for fl in recon_fls:
         for sd in sd_fls:
             tmp = read_saildrone_format(filename=f"{saildrone_dir}{os.sep}{sd}")
             tmp = tmp[["latitude", "longitude", "date"]]
-            tmp = tmp[(tmp.date >= flight_data.time.min()) & (tmp.date <= flight_data.time.max())].reset_index(drop=True)
-            tmp["hour"] = (tmp.date - first_hour_time)
-            tmp["hr"] = tmp.hour.dt.days*24 + tmp.hour.dt.seconds/60/60
+            tmp = tmp[
+                (tmp.date >= flight_data.time.min())
+                & (tmp.date <= flight_data.time.max())
+            ].reset_index(drop=True)
+            tmp["hour"] = tmp.date - first_hour_time
+            tmp["hr"] = tmp.hour.dt.days * 24 + tmp.hour.dt.seconds / 60 / 60
 
             sd_data.append(tmp)
-        
+
         if drop_data is not None:
             drop_data = drop_data[["start_lon", "start_lat", "start_time"]]
             drop_data = drop_data.groupby("start_time").first().reset_index()
             drop_data["hour"] = drop_data.start_time - first_hour_time
-            drop_data["hr"] = drop_data.hour.dt.days*24 + drop_data.hour.dt.seconds/60/60
+            drop_data["hr"] = (
+                drop_data.hour.dt.days * 24 + drop_data.hour.dt.seconds / 60 / 60
+            )
 
-        plot_aircraft_recon_mission_with_saildrones(recon_data=flight_data, sd_data=sd_data, drop_data=drop_data, storm=storm, fig_dir=fig_dir)
-
-
-
+        plot_aircraft_recon_mission_with_saildrones(
+            recon_data=flight_data,
+            sd_data=sd_data,
+            drop_data=drop_data,
+            storm=storm,
+            fig_dir=fig_dir,
+        )

@@ -7,13 +7,7 @@ from cartopy.geodesic import Geodesic
 from datetime import datetime
 
 
-
-
-
 def get_aircraft_recon_position(value: str):
-
-
-
     val = int(value[:-1])
     val_degrees = val // 100
     val_minutes = val % 100
@@ -27,30 +21,24 @@ def get_aircraft_recon_position(value: str):
     return val * factor
 
 
-
 def get_aircraft_recon_pressure(value: str):
     try:
-        val = int(value) / 10.
-        if val < 100.:
-            val += 1000.
+        val = int(value) / 10.0
+        if val < 100.0:
+            val += 1000.0
     except ValueError:
         val = np.nan
-
 
     return val
 
 
-
 def get_mission_names_form_tidbits_link(url: str):
-
     params = url.split("/")[-1].split("_")[-1].split(".txt")[0].split("-")
     storm = params[2]
     if ".csv" in storm:
         storm = storm.split(".")[0]
-        
+
     return {"aircraft": params[0], "time": params[1], "storm": storm}
-
-
 
 
 def convert_time_to_utc(
