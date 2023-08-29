@@ -31,7 +31,7 @@ check_for_dir_create(storm_dir)
 check_for_dir_create(btk_dir)
 
 # for invest and storm
-all_records, _ = get_files_at_url(url=atcf_storm_archive)
+all_records = get_files_at_url(url=atcf_storm_archive)
 invest_records = [rec for rec in all_records if re.match(f".*aal9.", rec)]
 storm_records = [rec for rec in all_records if re.match(f".*aal[^9]\d", rec)]
 
@@ -47,7 +47,7 @@ for storm in storm_records:
     retrieve_url_file(storm, f"{storm_dir}{os.sep}{filename}")
 
 # for best track
-all_records, _ = get_files_at_url(url=atcf_btk_archive)
+all_records = get_files_at_url(url=atcf_btk_archive)
 btk_records = [rec for rec in all_records if ".dat" in rec and "bal" in rec]
 print(f"Downloading ATCF best track data.")
 for btk in btk_records:

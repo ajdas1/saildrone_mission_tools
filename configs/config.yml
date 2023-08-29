@@ -12,7 +12,7 @@ buoys: 41002, 41043, 41049, 41052, 42099
 download_saildrone_data: True
 download_saildrone_data_path: data/saildrone
 all_saildrones: 1031, 1036, 1040, 1041, 1042, 1045, 1057, 1064, 1065, 1068, 1069, 1083
-update_saildrones: 1031, 1036, 1057, 1064, 1065, 1068, 1069, 1083
+update_saildrones: 1031, 1032, 1036, 1040, 1041, 1042, 1057, 1064, 1065, 1068, 1069, 1083
 
 # download_jason_data
 download_jason3_data: False
@@ -62,4 +62,6 @@ clean_up_data_and_figures: True
 # plot_aircraft_recon
 download_aircraft_recon: True
 download_recon_flight_data_path: data/recon/aircraft
-figure_path: figures/aircraft_recon
+download_recon_dropsonde_data_path: data/recon/dropsonde
+aircraft_recon_figure_path: figures/aircraft_recon
+aircraft_recon_hours_back: 48

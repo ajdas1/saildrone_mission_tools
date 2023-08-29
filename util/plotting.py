@@ -56,6 +56,65 @@ intensity_aids_to_use = [
 ]
 
 
+
+def plot_aircraft_recon_mission_with_saildrones(recon_data: pd.DataFrame, sd_data: List[pd.DataFrame], drop_data: pd.DataFrame, storm: str, fig_dir: str):
+
+
+    hour_times = recon_data[(recon_data.time.dt.minute == 0) & (recon_data.time.dt.second == 0)].time
+    first_hour_time = hour_times.iloc[0]
+    recon_data["hour"] = (recon_data.time - first_hour_time)
+    recon_data["hr"] = recon_data.hour.dt.days*24 + recon_data.hour.dt.seconds/60/60
+    data_sub = recon_data[(recon_data.time.dt.minute.isin([0, 10, 20, 30, 40, 50])) & (recon_data.time.dt.second == 0)].reset_index(drop=True)
+    data_sub.wind_direction = (90 - (data_sub.wind_direction + 180)) % 360
+    data_sub["u"] = data_sub.wind_speed * np.cos(np.deg2rad(data_sub.wind_direction))
+    data_sub["v"] = data_sub.wind_speed * np.sin(np.deg2rad(data_sub.wind_direction))
+
+    lon_min, lon_max, lat_min, lat_max = recon_data.lon.min(), recon_data.lon.max(), recon_data.lat.min(), recon_data.lat.max()
+
+    
+    fig = plt.figure(figsize = (12, 8))
+    ax = fig.add_subplot(111, projection=proj)
+    f1 = ax.scatter(recon_data.lon, recon_data.lat, s=3, c=recon_data.hr, cmap="turbo", vmin=recon_data.hr.min(), vmax=recon_data.hr.max())
+    ax.barbs(data_sub.lon, data_sub.lat, data_sub.u, data_sub.v, length=5)
+
+    if drop_data is not None:
+        ax.scatter(drop_data.start_lon, drop_data.start_lat, s=28, c=drop_data.hr, marker="o", cmap="turbo", vmin=recon_data.hr.min(), vmax=recon_data.hr.max(), ec="k", lw=1)
+
+
+    for sd in sd_data:
+        ax.scatter(sd.longitude, sd.latitude, s=28, c=sd.hr, marker="*", cmap="turbo", vmin=recon_data.hr.min(), vmax=recon_data.hr.max())
+
+    ax.scatter(-130, -20, s=28, c="k", marker="*", label="SD")
+    ax.scatter(-130, -20, s=28, c="k", marker="o", label="dropsonde")
+    leg = ax.legend(loc=1)
+
+    cbar = plt.colorbar(f1, ticks=np.arange(0, len(hour_times), 1), pad=.02)
+    cbar.ax.set_yticklabels([f"{tm.strftime('%b-%d')}\n{tm.strftime('%H:%M')}" for tm in hour_times])
+    set_cartopy_projection_atlantic(ax=ax, extent=[lon_min-3, lon_max+3, lat_min-3, lat_max+3], xticks=np.arange(-110, -30, get_tick_frequency_from_range(min=lon_min, max=lon_max, buffer=3)), ylabel="bottom", yticks=np.arange(0, 90, get_tick_frequency_from_range(min=lat_min, max=lat_max, buffer=3)))
+    ax.set_title(f"{storm} \n{recon_data.time.iloc[0].strftime('%Y-%m-%d %H:%M UTC')} - {recon_data.time.iloc[-1].strftime('%Y-%m-%d %H:%M UTC')}")
+    
+    plt.savefig(f"{fig_dir}{os.sep}{storm}_{recon_data.time.iloc[0].strftime('%Y-%m-%d_%H:%M')}.png", dpi=200, bbox_inches="tight")
+    plt.close("all")
+
+
+def get_tick_frequency_from_range(min: float, max: float, buffer: float = 3.) -> int:
+
+    drange = (max - min) + 2 * buffer
+    if drange <= 10:
+        dval = 1
+    elif drange <= 20:
+        dval = 2
+    elif drange <= 30:
+        dval = 3
+    elif drange <= 40:
+        dval = 4
+
+    return dval
+
+
+
+
+
 def plot_system_winds(btk_data: pd.DataFrame, fcst_data: pd.DataFrame, filename: str):
     name = btk_data.StormName.iloc[-1]
     if name == "INVEST":

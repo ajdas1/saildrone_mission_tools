@@ -12,6 +12,8 @@ jason3_archive = "https://www.ncei.noaa.gov/data/oceans/jason3/gdr/gdr"
 nhc_outlook_archive = "https://www.nhc.noaa.gov/archive/xgtwo/atl"
 saildrone_archive = "https://data.pmel.noaa.gov/generic/erddap/tabledap/"
 recon_mission_archive = "https://www.tropicaltidbits.com/data"
+recon_mission_archive_high_density_obs = "https://www.nhc.noaa.gov/archive/recon/2023/AHONT1"
+recon_mission_archive_dropsonde = "https://www.nhc.noaa.gov/archive/recon/2023/REPNT3"
 
 url_buoy_info = "https://www.ndbc.noaa.gov/station_page.php?station="
 url_glider_franklin = (

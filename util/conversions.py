@@ -46,7 +46,11 @@ def get_aircraft_recon_pressure(value: str):
 def get_mission_names_form_tidbits_link(url: str):
 
     params = url.split("/")[-1].split("_")[-1].split(".txt")[0].split("-")
-    return {"aircraft": params[0], "time": params[1], "storm": params[2]}
+    storm = params[2]
+    if ".csv" in storm:
+        storm = storm.split(".")[0]
+        
+    return {"aircraft": params[0], "time": params[1], "storm": storm}
 
 
 
