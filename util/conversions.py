@@ -8,6 +8,7 @@ from datetime import datetime
 
 
 def get_aircraft_recon_position(value: str):
+
     val = int(value[:-1])
     val_degrees = val // 100
     val_minutes = val % 100

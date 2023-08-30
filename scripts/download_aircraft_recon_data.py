@@ -20,6 +20,7 @@ config = read_yaml_config(config_file)
 if not config["download_aircraft_recon"]:
     sys.exit()
 
+print("Downloading the flight level and dropsonde data from aircraft reconnaissance.")
 # flight level
 recon_dir = f"{repo_path}{os.sep}" + f"{config['download_recon_flight_data_path']}"
 check_for_dir_create(recon_dir, empty=True)

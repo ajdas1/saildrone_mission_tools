@@ -118,6 +118,18 @@ def decode_pressure_geopotential(value: str, part: str):
             geo = int(value[2:]) + 3000
         except ValueError:
             geo = np.nan
+    elif lev == "50":
+        p_level = 500
+        try:
+            geo = int(value[2:]) + 5000
+        except ValueError:
+            geo = np.nan
+    elif lev == "40":
+        p_level = 400
+        try:
+            geo = int(value[2:]) + 7000
+        except ValueError:
+            geo = np.nan
     elif lev == "99":
         try:
             p_level = int(value[2:])
@@ -139,7 +151,7 @@ def decode_pressure_geopotential(value: str, part: str):
 
 
 def read_dropsonde_part_a_pgtw(data: List[str], drop_dict: dict) -> dict:
-    part_a_pressure_indicators = ["99", "00", "92", "85", "70"]
+    part_a_pressure_indicators = ["99", "00", "92", "85", "70", "50", "40"]
     pressure_indices = {
         idx: aidx
         for idx in part_a_pressure_indicators
@@ -209,9 +221,16 @@ def read_dropsonde_part_a_position(
             data = data[data.index("SPG") : -1]
 
     if len(data) > 6:
-        data = data_orig
-        data = "".join(data).split(" ")
-        data = data[data.index("REL") : -1]
+        if "LAST" in data:
+            data = data[:data.index("LAST")]
+            if len(data) > 6:
+                data = data_orig
+                data = "".join(data).split(" ")
+                data = data[data.index("REL") : -1]
+        else:
+            data = data_orig
+            data = "".join(data).split(" ")
+            data = data[data.index("REL") : -1]
     elif 3 < len(data) < 6:
         data = data_orig
         data = "".join(data).split(" ")
@@ -363,10 +382,20 @@ def read_dropsonde_part_b_pw(data: List[str], drop_dict: dict) -> dict:
 
 
 def interpret_dropsonde_text_file(data: List[str], filename: str) -> pd.DataFrame:
-    drop_dict = {}
+    drop_dict = {
+        "pressure": [],
+        "geopotential": [],
+        "temperature": [],
+        "dewpoint": [],
+        "u": [],
+        "v": [],
+    }
     drop_date = datetime.strptime(filename.split(".")[-2], "%Y%m%d%H%M")
     data = [line.rstrip() for line in data]
     data = [line for line in data if len(line) >= 2]
+    if data[2].split("  ")[1].split(" ")[0] == "/////":
+        return None
+    
     section_idx = [idx for idx, line in enumerate(data) if "XX" in line]
     data_a = data[section_idx[0] : section_idx[1]]
     data_b = data[section_idx[1] :]
@@ -384,14 +413,6 @@ def interpret_dropsonde_text_file(data: List[str], filename: str) -> pd.DataFram
     idx_start = [idx for idx, el in enumerate(data_a_pgtw) if el[:2] == "99"][-1]
     data_a_pgtw = data_a_pgtw[idx_start:]
     data_a_pgtw = [el for el in data_a_pgtw if el[:2] not in ["77", "88"]]
-    drop_dict = {
-        "pressure": [],
-        "geopotential": [],
-        "temperature": [],
-        "dewpoint": [],
-        "u": [],
-        "v": [],
-    }
     drop_dict = read_dropsonde_part_a_pgtw(data=data_a_pgtw, drop_dict=drop_dict)
 
     data_a_fl = data_a[section_idx["61616"] : section_idx["62626"]]
@@ -469,10 +490,12 @@ def combine_aircraft_recon_hdob(
         datetime.strptime(dat[2].split(" ")[-1], "%Y%m%d") for dat in flight_data
     ]
     flight_data = [dat[3:] for dat in flight_data]
+    flight_data = [[line for line in dat if line[8:12]!="9900"] for dat in flight_data]
     flight_data = [
-        read_aircraft_recon_hdob_file(dat, flight_date=flight_date[idx]).round(2)
+        read_aircraft_recon_hdob_file(data=dat, flight_date=flight_date[idx]).round(2)
         for idx, dat in enumerate(flight_data)
     ]
+
     flight_data = pd.concat(flight_data).sort_values(by="time").reset_index(drop=True)
     filename = f"{recon_dir}{os.sep}{center}_{flight_date[0].strftime('%Y%m%d')}_{flight.replace(' ', '-')}.csv"
     flight_data.to_csv(filename, index=False)
@@ -485,14 +508,23 @@ def read_aircraft_recon_hdob_file(
 ) -> pd.DataFrame:
     data = [line.rstrip().split(" ") for line in data]
     time = [
-        flight_date.replace(
-            hour=int(line[0][:2]),
-            minute=int(line[0][2:4]),
-            second=int(line[0][4:6]),
-            microsecond=0,
-        )
-        for line in data
+            flight_date.replace(
+                hour=int(line[0][:2]),
+                minute=int(line[0][2:4]),
+                second=int(line[0][4:6]),
+                microsecond=0,
+            ) if len(line[0]) == 6 else np.datetime64("NaT")
+            for line in data
     ]
+
+    ids_nat = [idx for idx, val in enumerate(time) if np.isnat(np.datetime64(val))]
+    for idx in ids_nat:
+        if idx < (len(time)-1):
+            time[idx] = time[idx+1]-timedelta(seconds=30)
+        else:
+            time[idx] = time[idx-1]+timedelta(seconds=30)
+
+
     lat = [get_aircraft_recon_position(value=line[1]) for line in data]
     lon = [get_aircraft_recon_position(value=line[2]) for line in data]
     pres = [get_aircraft_recon_pressure(value=line[3]) for line in data]

@@ -62,6 +62,7 @@ def plot_aircraft_recon_mission_with_saildrones(
     drop_data: pd.DataFrame,
     storm: str,
     fig_dir: str,
+    aircraft: str
 ):
     hour_times = recon_data[
         (recon_data.time.dt.minute == 0) & (recon_data.time.dt.second == 0)
@@ -145,11 +146,11 @@ def plot_aircraft_recon_mission_with_saildrones(
         ),
     )
     ax.set_title(
-        f"{storm} \n{recon_data.time.iloc[0].strftime('%Y-%m-%d %H:%M UTC')} - {recon_data.time.iloc[-1].strftime('%Y-%m-%d %H:%M UTC')}"
+        f"{storm} ({aircraft}) \n{recon_data.time.iloc[0].strftime('%Y-%m-%d %H:%M UTC')} - {recon_data.time.iloc[-1].strftime('%Y-%m-%d %H:%M UTC')}"
     )
 
     plt.savefig(
-        f"{fig_dir}{os.sep}{storm}_{recon_data.time.iloc[0].strftime('%Y-%m-%d_%H:%M')}.png",
+        f"{fig_dir}{os.sep}{storm}_{aircraft}_{recon_data.time.iloc[0].strftime('%Y-%m-%d')}.png",
         dpi=200,
         bbox_inches="tight",
     )
@@ -166,6 +167,8 @@ def get_tick_frequency_from_range(min: float, max: float, buffer: float = 3.0) -
         dval = 3
     elif drange <= 40:
         dval = 4
+    else:
+        dval = 5
 
     return dval
 

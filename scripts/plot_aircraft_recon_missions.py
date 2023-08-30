@@ -16,9 +16,9 @@ from read_file import read_saildrone_format
 config_file = f"{repo_path}{os.sep}configs{os.sep}config.yml"
 config = read_yaml_config(config_file)
 
-if not config["download_aircraft_recon"]:
+if not config["plot_aircraft_recon"]:
     sys.exit()
-
+print("Plotting aircraft recon data with saildrones.")
 
 current_time = convert_time_to_utc(
     datetime.now(), timezone=pytz.timezone(config["local_timezone"])
@@ -89,4 +89,5 @@ for fl in recon_fls:
             drop_data=drop_data,
             storm=storm,
             fig_dir=fig_dir,
+            aircraft=aircraft
         )

@@ -21,7 +21,7 @@ config = read_yaml_config(config_file)
 
 if not config["download_aircraft_recon"]:
     sys.exit()
-
+print("Processing raw aircraft recon data into flights.")
 
 current_time = convert_time_to_utc(
     datetime.now(), timezone=pytz.timezone(config["local_timezone"])
@@ -42,25 +42,19 @@ recon_fls_knhc = [fl for fl in recon_fls if "KNHC" in fl]
 recon_fls_kwbc = [fl for fl in recon_fls if "KWBC" in fl]
 recon_drops = sorted([fl for fl in os.listdir(recon_drop_dir) if ".csv" not in fl])
 
-knhc_flight_data = []
-for fl in recon_fls_knhc:
-    with open(f"{recon_flight_dir}{os.sep}{fl}", "r") as file:
-        data = file.readlines()
-    data = [line.rstrip() for line in data]
-    data = [line for line in data if len(line) > 2]
-    knhc_flight_data.append(data)
-
 
 for fl in recon_drops:
     with open(f"{recon_drop_dir}{os.sep}{fl}", "r") as file:
         data = file.readlines()
+    data = [line.replace("LAST REPORT", "") for line in data]
 
     drop_data = interpret_dropsonde_text_file(data=data, filename=fl)
-    drop_data = drop_data.round(2)
-    drop_data = drop_data[drop_data.pressure > 100]
+    if drop_data is not None:
+        drop_data = drop_data.round(2)
+        drop_data = drop_data[drop_data.pressure > 100]
 
-    file_save = f"{recon_drop_dir}{os.sep}{fl[:-3]}csv"
-    drop_data.to_csv(file_save, index=False)
+        file_save = f"{recon_drop_dir}{os.sep}{fl[:-3]}csv"
+        drop_data.to_csv(file_save, index=False)
     os.remove(f"{recon_drop_dir}{os.sep}{fl}")
 
 recon_drops = sorted([fl for fl in os.listdir(recon_drop_dir) if ".csv" in fl])
@@ -72,6 +66,17 @@ for fl in recon_drops_knhc:
     knhc_drop_data.append(pd.read_csv(f"{recon_drop_dir}{os.sep}{fl}"))
 
 
+knhc_flight_data = []
+for fl in recon_fls_knhc:
+    with open(f"{recon_flight_dir}{os.sep}{fl}", "r") as file:
+        data = file.readlines()
+    data = [line.rstrip() for line in data]
+    data = [line for line in data if len(line) > 2]
+    knhc_flight_data.append(data)
+
+
+
+
 knhc_flight = [fl[2].split("  ")[0] for fl in knhc_flight_data]
 knhc_drop = [
     f"{df.aircraft.iloc[0]} {df.flight_id.iloc[0]} {df.storm.iloc[0]}"
@@ -79,6 +84,7 @@ knhc_drop = [
 ]
 knhc_flight_unique = sorted(list(set(knhc_flight)))
 for flight in knhc_flight_unique:
+    print(flight)
     center = "KNHC"
     flight_data_ids = combine_aircraft_recon_hdob(
         data=knhc_flight_data,
@@ -108,6 +114,10 @@ for flight in knhc_flight_unique:
             os.remove(f"{recon_drop_dir}{os.sep}{recon_drops_knhc[idx]}")
 
 
+
+
+
+
 kwbc_flight_data = []
 for fl in recon_fls_kwbc:
     with open(f"{recon_flight_dir}{os.sep}{fl}", "r") as file:
@@ -128,7 +138,8 @@ kwbc_drop = [
 ]
 kwbc_flight_unique = sorted(list(set(kwbc_flight)))
 for flight in kwbc_flight_unique:
-    center = "KNHC"
+    print(flight)
+    center = "KWBC"
     flight_data_ids = combine_aircraft_recon_hdob(
         data=kwbc_flight_data,
         flight=flight,
