@@ -12,8 +12,8 @@ buoys: 41002, 41043, 41049, 41052, 42099
 download_saildrone_data: True
 download_saildrone_data_path: data/saildrone
 all_saildrones: 1031, 1036, 1040, 1041, 1042, 1045, 1057, 1064, 1065, 1068, 1069, 1083
-# update_saildrones: 1031, 1032, 1036, 1040, 1041, 1042, 1057, 1064, 1065, 1068, 1069, 1083
-update_saildrones: 1069, 1083
+update_saildrones: 1031, 1036, 1040, 1041, 1042, 1057, 1064, 1065, 1068, 1069, 1083
+# update_saildrones: 1069, 1083
 
 # download_jason_data
 download_jason3_data: False
@@ -70,6 +70,10 @@ aircraft_recon_hours_back: 12
 
 # plot aircraft_recon_dropsondes_near_saildrone
 download_aicraft_recon_dropsonde_full: True
+identify_dropsondes_in_range_of_saildrone: True
 download_aircraft_recon_dropsonde_data_path: data/recon/dropsonde_full
-dropsonde_download_start_date: 2023-08-01 00:00:00
-dropsonde_download_end_date: 2023-08-30 23:59:59
+dropsonde_start_date: 2023-08-01 00:00:00
+dropsonde_end_date: 2023-08-30 23:59:59
+saildrone_for_dropsonde_comparison: 1083
+saildrone_time_tolerance_minutes: 30
+saildrone_distance_tolerance_km: 100

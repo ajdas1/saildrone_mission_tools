@@ -25,6 +25,15 @@ from typing import Any, List
 from paths import repo_path
 
 
+def read_dropsonde_data(filename: str):
+    data = xr.open_dataset(filename, drop_variables=["trajectory", "obs"], engine='netcdf4').to_dataframe().reset_index()
+    data = data.drop(columns=["obs"]).round(2)
+
+
+
+    return data
+
+
 def decode_drop_position(value: str):
     lat = int(value[:4]) / 100.0
     lon = int(value[5:10]) / 100.0
@@ -786,7 +795,7 @@ def read_ndbc_buoy_format(filename: str) -> pd.DataFrame:
 
 def read_saildrone_format(filename: str) -> pd.DataFrame:
     data = (
-        xr.open_dataset(filename, drop_variables=["trajectory", "obs", "rowSize"])
+        xr.open_dataset(filename, drop_variables=["trajectory", "obs", "rowSize"], engine='netcdf4')
         .to_dataframe()
         .reset_index(drop=True)
     )

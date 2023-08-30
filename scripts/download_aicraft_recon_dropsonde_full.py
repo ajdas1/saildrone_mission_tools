@@ -1,33 +1,18 @@
 
-
-
-import importlib
-
-import paths
-importlib.reload(paths)
-import read_url
-importlib.reload(read_url)
-
-from paths import recon_mission_archive_full_dropsonde
-
-import warnings
-warnings.filterwarnings("ignore")
-
 import os
-import pytz
 import sys
+import warnings
 
-from conversions import convert_time_to_utc
 from datetime import datetime, timedelta
 from paths import (
-    recon_mission_archive_high_density_obs,
-    recon_mission_archive_dropsonde,
     check_for_dir_create,
     read_yaml_config,
+    recon_mission_archive_full_dropsonde,
     repo_path,
 )
 from read_url import get_files_at_url, retrieve_url_file
 
+warnings.filterwarnings("ignore")
 
 config_file = f"{repo_path}{os.sep}configs{os.sep}config.yml"
 config = read_yaml_config(config_file)
@@ -35,13 +20,15 @@ config = read_yaml_config(config_file)
 if not config["download_aicraft_recon_dropsonde_full"]:
     sys.exit()
 
-print("Downloading full dropsonde data from aircraft recon.")
 drop_dir = f"{repo_path}{os.sep}" + f"{config['download_aircraft_recon_dropsonde_data_path']}"
 check_for_dir_create(drop_dir)
 
 
-start_date = config["dropsonde_download_start_date"]
-end_date = config["dropsonde_download_end_date"]
+start_date = config["dropsonde_start_date"]
+end_date = config["dropsonde_end_date"]
+print("Downloading full dropsonde data from aircraft recon.")
+print(f"Start date: {start_date.strftime('%Y-%m-%d')}")
+print(f"End date: {end_date.strftime('%Y-%m-%d')}")
 dates = [start_date + timedelta(days=dy) for dy in range(1000) if (start_date + timedelta(days=dy)) <= end_date]
 dates_str = [dt.strftime("%Y%m%d") for dt in dates]
 
