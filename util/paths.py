@@ -16,6 +16,7 @@ recon_mission_archive_high_density_obs = (
     "https://www.nhc.noaa.gov/archive/recon/2023/AHONT1"
 )
 recon_mission_archive_dropsonde = "https://www.nhc.noaa.gov/archive/recon/2023/REPNT3"
+recon_mission_archive_full_dropsonde = "https://seb.omao.noaa.gov/pub/flight/ASPEN_Data"
 
 url_buoy_info = "https://www.ndbc.noaa.gov/station_page.php?station="
 url_glider_franklin = (

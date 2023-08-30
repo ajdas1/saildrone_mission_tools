@@ -60,10 +60,16 @@ document_author: Ajda Savarin
 summary_figure_colorbar: configs/colorbar.png
 clean_up_data_and_figures: True
 
-# plot_aircraft_recon
+# plot_aircraft_recon_realtime
 download_aircraft_recon: True
 plot_aircraft_recon: True
 download_recon_flight_data_path: data/recon/aircraft
 download_recon_dropsonde_data_path: data/recon/dropsonde
 aircraft_recon_figure_path: figures/aircraft_recon
 aircraft_recon_hours_back: 12
+
+# plot aircraft_recon_dropsondes_near_saildrone
+download_aicraft_recon_dropsonde_full: True
+download_aircraft_recon_dropsonde_data_path: data/recon/dropsonde_full
+dropsonde_download_start_date: 2023-08-01 00:00:00
+dropsonde_download_end_date: 2023-08-30 23:59:59
