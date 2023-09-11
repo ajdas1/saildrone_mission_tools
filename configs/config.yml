@@ -12,7 +12,7 @@ buoys: 41002, 41043, 41049, 41052, 42099
 download_saildrone_data: True
 download_saildrone_data_path: data/saildrone
 all_saildrones: 1031, 1036, 1040, 1041, 1042, 1045, 1057, 1064, 1065, 1068, 1069, 1083
-update_saildrones: 1031, 1036, 1040, 1041, 1042, 1057, 1064, 1065, 1068, 1069, 1083
+update_saildrones: 1031, 1036, 1040, 1041, 1042, 1045, 1057, 1064, 1065, 1068, 1069, 1083
 # update_saildrones: 1069, 1083
 
 # download_jason_data
