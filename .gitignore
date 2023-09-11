@@ -21,7 +21,7 @@
 
 
 # pdf files
-**.pdf
+**/nhc_outlook_summary/**.pdf
 
 # shape files
 **.dbf
