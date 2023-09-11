@@ -27,6 +27,7 @@ if len(fls) == 0:
     print("There is no data to establish a return period for a given location.")
     sys.exit()
 
+print()
 print("Determining return period for chosen point.")
 data = []
 for fl in fls:
@@ -55,8 +56,8 @@ nearest_lon = data[data.dist_point == nearest_dist].longitude.iloc[0]
 print(f"Chosen location (lat, lon): ({point_lat}, {point_lon})")
 print(
     f"The nearest point to the chosen location is {nearest_dist:.2f}"
-    + f" km away at (lat, lon): ({nearest_lat:.4f}, "
-    + f"{nearest_lon:.4f})"
+    + f" km away at (lat, lon): ({nearest_lat:.2f}, "
+    + f"{nearest_lon:.2f})"
 )
 
 
@@ -79,3 +80,4 @@ return_times = [tm for tm in return_times if tm >= current_time][
 ]
 return_times = [tm.strftime("%Y-%m-%d %H:%M:%S") for tm in return_times]
 print("Return times for the chosen location: \n     " + "\n     ".join(return_times))
+print()
