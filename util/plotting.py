@@ -497,27 +497,28 @@ def plot_shapefile_with_btks_and_fcsts(
     fig = plt.figure(figsize=(12, 12))
     ax = fig.add_subplot(111, projection=proj)
 
-    shapefile_data.plot(ax=ax, color=area_colors, alpha=0.5, edgecolor="k")
-    for _, row in shapefile_data.iterrows():
-        ax.annotate(
-            text=row["AREA"],
-            xy=row["coords"],
-            ha="center",
-            va="center",
-            fontweight="bold",
-        )
-    for idx, row in shapefile_data.iterrows():
-        annotate_text = (
-            f"Area {row['AREA']}\n2 day: {row['PROB2DAY']}\n7 day: {row['PROB7DAY']}"
-        )
-        ax.annotate(
-            text=annotate_text,
-            xy=(-110 + idx * 20, 1.5),
-            ha="left",
-            va="top",
-            fontweight="semibold",
-            backgroundcolor=(1, 1, 1, 0.5),
-        )
+    if len(shapefile_data) > 0:
+        shapefile_data.plot(ax=ax, color=area_colors, alpha=0.5, edgecolor="k")
+        for _, row in shapefile_data.iterrows():
+            ax.annotate(
+                text=row["AREA"],
+                xy=row["coords"],
+                ha="center",
+                va="center",
+                fontweight="bold",
+            )
+        for idx, row in shapefile_data.iterrows():
+            annotate_text = (
+                f"Area {row['AREA']}\n2 day: {row['PROB2DAY']}\n7 day: {row['PROB7DAY']}"
+            )
+            ax.annotate(
+                text=annotate_text,
+                xy=(-110 + idx * 20, 1.5),
+                ha="left",
+                va="top",
+                fontweight="semibold",
+                backgroundcolor=(1, 1, 1, 0.5),
+            )
 
     for btk in btk_data:
         ax.plot(
@@ -612,27 +613,28 @@ def plot_shapefile_with_fcsts(
     fig = plt.figure(figsize=(12, 12))
     ax = fig.add_subplot(111, projection=proj)
 
-    shapefile_data.plot(ax=ax, color=area_colors, alpha=0.5, edgecolor="k")
-    for _, row in shapefile_data.iterrows():
-        ax.annotate(
-            text=row["AREA"],
-            xy=row["coords"],
-            ha="center",
-            va="center",
-            fontweight="bold",
-        )
-    for idx, row in shapefile_data.iterrows():
-        annotate_text = (
-            f"Area {row['AREA']}\n2 day: {row['PROB2DAY']}\n7 day: {row['PROB7DAY']}"
-        )
-        ax.annotate(
-            text=annotate_text,
-            xy=(-110 + idx * 20, 1.5),
-            ha="left",
-            va="top",
-            fontweight="semibold",
-            backgroundcolor=(1, 1, 1, 0.5),
-        )
+    if len(shapefile_data) > 0:
+        shapefile_data.plot(ax=ax, color=area_colors, alpha=0.5, edgecolor="k")
+        for _, row in shapefile_data.iterrows():
+            ax.annotate(
+                text=row["AREA"],
+                xy=row["coords"],
+                ha="center",
+                va="center",
+                fontweight="bold",
+            )
+        for idx, row in shapefile_data.iterrows():
+            annotate_text = (
+                f"Area {row['AREA']}\n2 day: {row['PROB2DAY']}\n7 day: {row['PROB7DAY']}"
+            )
+            ax.annotate(
+                text=annotate_text,
+                xy=(-110 + idx * 20, 1.5),
+                ha="left",
+                va="top",
+                fontweight="semibold",
+                backgroundcolor=(1, 1, 1, 0.5),
+            )
 
     name = {}
     for fcst in fcst_data:
@@ -736,27 +738,28 @@ def plot_shapefile_with_btks(
     fig = plt.figure(figsize=(12, 12))
     ax = fig.add_subplot(111, projection=proj)
 
-    shapefile_data.plot(ax=ax, color=area_colors, alpha=0.5, edgecolor="k")
-    for _, row in shapefile_data.iterrows():
-        ax.annotate(
-            text=row["AREA"],
-            xy=row["coords"],
-            ha="center",
-            va="center",
-            fontweight="bold",
-        )
-    for idx, row in shapefile_data.iterrows():
-        annotate_text = (
-            f"Area {row['AREA']}\n2 day: {row['PROB2DAY']}\n7 day: {row['PROB7DAY']}"
-        )
-        ax.annotate(
-            text=annotate_text,
-            xy=(-110 + idx * 20, 1.5),
-            ha="left",
-            va="top",
-            fontweight="semibold",
-            backgroundcolor=(1, 1, 1, 0.5),
-        )
+    if len(shapefile_data) > 0:
+        shapefile_data.plot(ax=ax, color=area_colors, alpha=0.5, edgecolor="k")
+        for _, row in shapefile_data.iterrows():
+            ax.annotate(
+                text=row["AREA"],
+                xy=row["coords"],
+                ha="center",
+                va="center",
+                fontweight="bold",
+            )
+        for idx, row in shapefile_data.iterrows():
+            annotate_text = (
+                f"Area {row['AREA']}\n2 day: {row['PROB2DAY']}\n7 day: {row['PROB7DAY']}"
+            )
+            ax.annotate(
+                text=annotate_text,
+                xy=(-110 + idx * 20, 1.5),
+                ha="left",
+                va="top",
+                fontweight="semibold",
+                backgroundcolor=(1, 1, 1, 0.5),
+            )
 
     for btk in btk_data:
         ax.plot(
@@ -828,28 +831,29 @@ def plot_shapefile(
     fig = plt.figure(figsize=(12, 12))
     ax = fig.add_subplot(111, projection=proj)
 
-    shapefile_data.plot(ax=ax, color=area_colors, alpha=0.5, edgecolor="k")
-    for _, row in shapefile_data.iterrows():
-        ax.annotate(
-            text=row["AREA"],
-            xy=row["coords"],
-            ha="center",
-            va="center",
-            fontweight="bold",
-        )
+    if len(shapefile_data) > 0:
+        shapefile_data.plot(ax=ax, color=area_colors, alpha=0.5, edgecolor="k")
+        for _, row in shapefile_data.iterrows():
+            ax.annotate(
+                text=row["AREA"],
+                xy=row["coords"],
+                ha="center",
+                va="center",
+                fontweight="bold",
+            )
 
-    for idx, row in shapefile_data.iterrows():
-        annotate_text = (
-            f"Area {row['AREA']}\n2 day: {row['PROB2DAY']}\n7 day: {row['PROB7DAY']}"
-        )
-        ax.annotate(
-            text=annotate_text,
-            xy=(-110 + idx * 20, 1.5),
-            ha="left",
-            va="top",
-            fontweight="semibold",
-            backgroundcolor=(1, 1, 1, 0.5),
-        )
+        for idx, row in shapefile_data.iterrows():
+            annotate_text = (
+                f"Area {row['AREA']}\n2 day: {row['PROB2DAY']}\n7 day: {row['PROB7DAY']}"
+            )
+            ax.annotate(
+                text=annotate_text,
+                xy=(-110 + idx * 20, 1.5),
+                ha="left",
+                va="top",
+                fontweight="semibold",
+                backgroundcolor=(1, 1, 1, 0.5),
+            )
 
     ax.plot([130, 140], [0, 1], c="yellow", alpha=0.5, lw=10, label="Low (<40%)")
     ax.plot([130, 140], [0, 1], c="orange", alpha=0.5, lw=10, label="Medium (40-60%)")

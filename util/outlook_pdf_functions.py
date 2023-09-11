@@ -244,15 +244,16 @@ def create_figure_packet_outlook(fig_dir: str, summary_dir: str, config: dict) -
         check_figure_dimensions(filename=fl, fig_dir=summary_dir) for fl in outlook_fls
     ]
     unique_dims = list(set(figure_dims))
-    max_xdim = max([ud[0] for ud in unique_dims])
-    max_ydim = max([ud[1] for ud in unique_dims])
-    if len(unique_dims) > 1:
-        _ = [
-            match_max_image_dimensions(
-                filename=fl, fig_dir=summary_dir, xdim=max_xdim, ydim=max_ydim
-            )
-            for fl in outlook_fls
-        ]
+    if len(unique_dims) > 0:
+        max_xdim = max([ud[0] for ud in unique_dims])
+        max_ydim = max([ud[1] for ud in unique_dims])
+        if len(unique_dims) > 1:
+            _ = [
+                match_max_image_dimensions(
+                    filename=fl, fig_dir=summary_dir, xdim=max_xdim, ydim=max_ydim
+                )
+                for fl in outlook_fls
+            ]
 
     # add colorbar
     _ = [

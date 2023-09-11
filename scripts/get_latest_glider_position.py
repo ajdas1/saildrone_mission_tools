@@ -48,19 +48,20 @@ print(
 url_glider = url_glider_unit1091
 page = str(urllib.request.urlopen(url_glider).read())
 tmp = page.split("\\n")
-category = [tm.split(" ")[0][:-1].split("'")[-1] for tm in tmp if len(tm) > 5]
+tmp = tmp[1:]
+tmp = [tm for tm in tmp if len(tm) > 5]
+category = [tm.split(" ")[0][:-1].split("'")[-1] for tm in tmp]
 
 
 lat = [
-    coordinate_degrees_minutes_to_decimal(tm.split(" ")[1]) for tm in tmp if len(tm) > 5
+    coordinate_degrees_minutes_to_decimal(tm.split(" ")[1]) for tm in tmp
 ]
 lon = [
-    coordinate_degrees_minutes_to_decimal(tm.split(" ")[2]) for tm in tmp if len(tm) > 5
+    coordinate_degrees_minutes_to_decimal(tm.split(" ")[2]) for tm in tmp
 ]
 time = [
     log_start_time + timedelta(seconds=float(tm.split(" ")[3]))
     for tm in tmp
-    if len(tm) > 5
 ]
 
 df = pd.DataFrame([], columns=["category", "lat", "lon", "time"])

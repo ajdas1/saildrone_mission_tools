@@ -66,14 +66,14 @@ plot_aircraft_recon: True
 download_recon_flight_data_path: data/recon/aircraft
 download_recon_dropsonde_data_path: data/recon/dropsonde
 aircraft_recon_figure_path: figures/aircraft_recon
-aircraft_recon_hours_back: 12
+aircraft_recon_hours_back: 72
 
 # plot aircraft_recon_dropsondes_near_saildrone
 download_aicraft_recon_dropsonde_full: True
 identify_dropsondes_in_range_of_saildrone: True
 download_aircraft_recon_dropsonde_data_path: data/recon/dropsonde_full
 dropsonde_start_date: 2023-08-01 00:00:00
-dropsonde_end_date: 2023-08-30 23:59:59
-saildrone_for_dropsonde_comparison: 1083
+dropsonde_end_date: 2023-09-01 23:59:59
+saildrone_for_dropsonde_comparison: 1031
 saildrone_time_tolerance_minutes: 30
 saildrone_distance_tolerance_km: 100
