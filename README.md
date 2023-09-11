@@ -65,8 +65,13 @@ To create the pdf files, there's some additional software that needs to be insta
 - *ImageMagick* <https://imagemagick.org/script/download.php>
 - *pdflatex* <https://www.latex-project.org/get/>
 
+## Real-time aircraft reconnaissance plotting
+**/bash/download_plot_latest_aircraft_recon.sh**
+- downloads and decodes the recon observations - flight level and dropsonde position
+- plots on a map with saildrone locations
 
-### IDEAS?
-- add real-time comparison with gliders??
-
-
+## Reconnaissance aircraft dropsondes in range of saildrone
+**/bash/download_process_aircraft_dropsonde_saildrone.sh**
+After all dropsondes are uploaded (a day or two after a flight):
+- downloads the full dropsonde data
+- given a saildrone, produces a list of dropsondes within a given distance of the saildrone
