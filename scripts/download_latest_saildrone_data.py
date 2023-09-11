@@ -20,6 +20,7 @@ saildrone_dir = f"{repo_path}{os.sep}" + f"{config['download_saildrone_data_path
 
 check_for_dir_create(saildrone_dir)
 
+print()
 for sd in update_saildrones:
     print(f"Downloading the latest file for SD-{sd}.")
     filename = f"sd{sd}_hurricane_2023.ncCF"
@@ -27,3 +28,4 @@ for sd in update_saildrones:
         url=f"{saildrone_archive}{filename}",
         destination=f"{saildrone_dir}{os.sep}{filename[:-2]}",
     )
+print()
