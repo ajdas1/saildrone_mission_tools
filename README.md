@@ -1,7 +1,7 @@
 # saildrone_mission_tools
 Helpful tools for Saildrone hurricane mission management.
 
-To create an anaconda environment where the scripts should run smoothly, and activate it:
+To create an anaconda environment where the scripts should run smoothly, and activate it (this works on Linux/Mac):
 
 ```
 conda update --all
@@ -12,7 +12,7 @@ conda activate sd_mission_tools
 The first time you run it, you will also need to add the util directory to the path
 ```
 cd util
-pwd (Linux/Mac) or cd (Windows) -- will return a path (e.g., /Users/....../util)
+pwd -- will return a path (e.g., /Users/....../util)
 conda develop /Users/....../util (insert the returned path instead of example)
 ```
 
